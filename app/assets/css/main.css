@@ -9,6 +9,8 @@
 @plugin "flowbite/plugin";
 @source "../../node_modules/flowbite";
 
-:root {
-    --color-fg-brand: var(--color-orange-500);
+@theme {
+    --color-primary: #f97316;
+    --color-primary-hover: #ea6c0a;
+    --color-secondary: #1e293b;
 }

@@ -81,10 +81,12 @@ onMounted(() => {
             </div>
         </nav>
 
-        <SharedAppSidebar />
+        <SharedSidebar />
 
         <main class="sm:ml-64 mt-14 bg-gray-50 flex-1 overflow-y-auto p-6">
-            <slot />
+            <div class="max-w-7xl mx-auto">
+                <slot />
+            </div>
         </main>
     </div>
 </template>

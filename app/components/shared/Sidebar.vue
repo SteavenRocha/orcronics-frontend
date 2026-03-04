@@ -23,7 +23,7 @@
                     </UiSideBarLink>
                 </li>
                 <li>
-                    <UiSideBarLink to="/customers" label="Customers">
+                    <UiSideBarLink to="/customers" label="Clientes">
                         <template #icon>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -44,7 +44,7 @@
                     </UiSideBarLink>
                 </li>
                 <li>
-                    <UiSideBarLink to="/users" label="Users">
+                    <UiSideBarLink to="/users" label="Usuarios">
                         <template #icon>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

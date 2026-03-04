@@ -7,8 +7,8 @@ defineProps<{
 
 <template>
     <NuxtLink :to="to"
-        class="flex items-center px-3 py-3 text-body rounded-md hover:bg-neutral-tertiary hover:text-fg-brand group"
-        active-class="bg-neutral-tertiary text-fg-brand">
+        class="flex items-center px-3 py-3 text-body rounded-md hover:bg-neutral-tertiary hover:text-primary group"
+        active-class="bg-neutral-tertiary text-primary">
         <slot name="icon" />
         <span class="flex-1 ms-3 whitespace-nowrap">{{ label }}</span>
         <slot name="badge" />
