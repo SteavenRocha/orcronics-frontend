@@ -1,3 +1,51 @@
+<script setup lang="ts">
+useHead({ title: 'Clientes | Orcronics' })
+
+const {
+    filteredCustomers,
+    loading,
+    searchQuery,
+    fetchCustomers,
+    toggleStatus,
+    removeCustomer,
+    updateCustomer,
+} = useCustomers()
+
+// --- MODAL EDITAR ---
+const showEditModal = ref(false)
+const editingId = ref<string | null>(null)
+const editForm = ref({ name: '' })
+
+function openEdit(customer: { id: string; name: string }) {
+    editingId.value = customer.id
+    editForm.value = { name: customer.name }
+    showEditModal.value = true
+}
+
+async function saveEdit() {
+    if (!editingId.value) return
+    await updateCustomer(editingId.value, editForm.value)
+    showEditModal.value = false
+}
+
+// --- MODAL ELIMINAR ---
+const showDeleteModal = ref(false)
+const deletingCustomer = ref<{ id: string; name: string } | null>(null)
+
+function openDelete(customer: { id: string; name: string }) {
+    deletingCustomer.value = customer
+    showDeleteModal.value = true
+}
+
+async function confirmDelete() {
+    if (!deletingCustomer.value) return
+    await removeCustomer(deletingCustomer.value.id)
+    showDeleteModal.value = false
+}
+
+onMounted(fetchCustomers)
+</script>
+
 <template>
     <div class="space-y-10">
         <div class="flex items-center justify-between">
@@ -23,13 +71,11 @@
             <div class="p-4 border-b border-gray-200">
                 <div class="relative w-72">
                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
-                        xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        aria-hidden="true">
-                        <path d="m21 21-4.34-4.34"></path>
-                        <circle cx="11" cy="11" r="8"></circle>
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
                     </svg>
-                    <input type="text" placeholder="Buscar clientes..."
+                    <input v-model="searchQuery" type="text" placeholder="Buscar clientes..."
                         class="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-primary" />
                 </div>
             </div>
@@ -53,111 +99,74 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100">
 
-                    <!-- FILA DE EJEMPLO -->
-                    <tr class="hover:bg-gray-50 transition-colors cursor-pointer">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                                    AC
-                                </div>
-                                <div>
-                                    <p class="font-medium text-gray-900">Acme Corporation</p>
-                                    <p class="text-xs text-gray-400">ID: c1</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                Activo
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 text-gray-500">25/1/2026</td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center justify-end gap-2">
-                                <!-- TOGGLE -->
-                                <button
-                                    class="p-1.5 rounded-lg text-gray-400 hover:text-orange-500 hover:bg-orange-50 transition-colors cursor-pointer"
-                                    title="Desactivar">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
-                                    </svg>
-                                </button>
-                                <!-- EDITAR -->
-                                <button
-                                    class="p-1.5 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors cursor-pointer"
-                                    title="Editar">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </button>
-                                <!-- ELIMINAR -->
-                                <button
-                                    class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
-                                    title="Eliminar">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </div>
+                    <!-- LOADING -->
+                    <UiTableSkeleton v-if="loading" :rows="5" :cols="4" />
+
+                    <!-- EMPTY -->
+                    <tr v-else-if="filteredCustomers.length === 0">
+                        <td colspan="4" class="px-6 py-16 text-center text-sm text-gray-400">
+                            No se encontraron clientes
                         </td>
                     </tr>
 
-                    <!-- FILA INACTIVA DE EJEMPLO -->
-                    <tr class="hover:bg-gray-50 transition-colors cursor-pointer">
+                    <!-- FILAS -->
+                    <tr v-else v-for="customer in filteredCustomers" :key="customer.id"
+                        class="hover:bg-gray-50 transition-colors cursor-pointer"
+                        @click="navigateTo(`/customers/${customer.id}`)">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div
-                                    class="w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
-                                    GI
+                                <div :style="{ backgroundColor: getAvatarColor(customer.name) }"
+                                    class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
+                                    {{ getInitials(customer.name) }}
                                 </div>
                                 <div>
-                                    <p class="font-medium text-gray-900">Global Industries</p>
-                                    <p class="text-xs text-gray-400">ID: c2</p>
+                                    <p class="font-medium text-gray-900">{{ customer.name }}</p>
+                                    <p class="text-xs text-gray-400">ID: {{ customer.id }}</p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-600">
-                                Inactivo
+                            <span
+                                :class="['px-2.5 py-1 rounded-full text-xs font-medium', customer.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
+                                {{ customer.is_active ? 'Activo' : 'Inactivo' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-gray-500">9/2/2026</td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 text-gray-500">{{ formatDate(customer.created_at) }}</td>
+                        <td class="px-6 py-4" @click.stop>
                             <div class="flex items-center justify-end gap-2">
-                                <button
-                                    class="p-1.5 rounded-lg text-gray-400 hover:text-orange-500 hover:bg-orange-50 transition-colors cursor-pointer"
-                                    title="Activar">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
+                                <UiIconButton :title="customer.is_active ? 'Desactivar' : 'Activar'" variant="warning"
+                                    @click="toggleStatus(customer.id, customer.is_active)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-archive" aria-hidden="true">
+                                        <rect width="20" height="5" x="2" y="3" rx="1"></rect>
+                                        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path>
+                                        <path d="M10 12h4"></path>
                                     </svg>
-                                </button>
-                                <button
-                                    class="p-1.5 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors cursor-pointer"
-                                    title="Editar">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </UiIconButton>
+
+                                <UiIconButton title="Editar" variant="primary" @click="openEdit(customer)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-pen" aria-hidden="true">
+                                        <path
+                                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z">
+                                        </path>
                                     </svg>
-                                </button>
-                                <button
-                                    class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
-                                    title="Eliminar">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
+                                </UiIconButton>
+
+                                <UiIconButton title="Eliminar" variant="danger" @click="openDelete(customer)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-trash2 lucide-trash-2"
+                                        aria-hidden="true">
+                                        <path d="M10 11v6"></path>
+                                        <path d="M14 11v6"></path>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                        <path d="M3 6h18"></path>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                     </svg>
-                                </button>
+                                </UiIconButton>
                             </div>
                         </td>
                     </tr>
