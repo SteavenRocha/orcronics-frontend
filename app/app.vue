@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <!--  <NuxtRouteAnnouncer />
-    <NuxtWelcome /> -->
-
-    <h1 class="text-3xl font-bold underline text-red-500">
-      Hello world!
-    </h1>
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
