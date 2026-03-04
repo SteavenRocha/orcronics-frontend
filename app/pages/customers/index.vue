@@ -9,7 +9,16 @@ const {
     toggleStatus,
     removeCustomer,
     updateCustomer,
+    createCustomer,
 } = useCustomers()
+
+// --- MODAL CREAR ---
+const showCreateModal = ref(false)
+
+async function handleCreate(name: string) {
+    await createCustomer({ name })
+    showCreateModal.value = false
+}
 
 // --- MODAL EDITAR ---
 const showEditModal = ref(false)
@@ -52,7 +61,7 @@ onMounted(fetchCustomers)
             <div>
                 <h1 class="text-3xl font-semibold text-gray-900">Clientes</h1>
             </div>
-            <UiBaseButton label="Agregar Cliente" variant="primary">
+            <UiBaseButton label="Agregar Cliente" variant="primary" @click="showCreateModal = true">
                 <template #icon>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -116,7 +125,7 @@ onMounted(fetchCustomers)
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div :style="{ backgroundColor: getAvatarColor(customer.name) }"
-                                    class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
+                                    class="w-9 h-9 rounded-md flex items-center justify-center text-white text-xs font-bold shrink-0">
                                     {{ getInitials(customer.name) }}
                                 </div>
                                 <div>
@@ -175,4 +184,7 @@ onMounted(fetchCustomers)
             </table>
         </div>
     </div>
+
+    <!-- Modal -->
+    <CustomersCustomerFormModal :show="showCreateModal" @close="showCreateModal = false" @submit="handleCreate" />
 </template>

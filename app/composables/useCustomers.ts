@@ -31,6 +31,15 @@ export function useCustomers() {
         }
     }
 
+    async function createCustomer(body: object) {
+        try {
+            const newCustomer = await customersService.create(body) as Customer
+            customers.value.unshift(newCustomer) // agrega al inicio de la lista
+        } catch (e) {
+            console.error('Error creating customer:', e)
+        }
+    }
+
     async function toggleStatus(id: string, is_active: boolean) {
         try {
             const updated = await (is_active
@@ -73,5 +82,6 @@ export function useCustomers() {
         toggleStatus,
         removeCustomer,
         updateCustomer,
+        createCustomer,
     }
 }
