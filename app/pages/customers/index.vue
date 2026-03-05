@@ -45,10 +45,11 @@ function openDelete(customer: { id: string; name: string }) {
     showDeleteModal.value = true
 }
 
-async function confirmDelete() {
+async function handleDelete() {
     if (!deletingCustomer.value) return
     await removeCustomer(deletingCustomer.value.id)
     showDeleteModal.value = false
+    deletingCustomer.value = null
 }
 
 onMounted(fetchCustomers)
@@ -190,4 +191,13 @@ onMounted(fetchCustomers)
 
     <CustomersCustomerFormModal :show="showEditModal" mode="edit" :initial-name="editingCustomer?.name"
         @close="showEditModal = false" @submit="handleEdit" />
+
+    <UiConfirmModal :show="showDeleteModal" title="Eliminar Cliente" @close="showDeleteModal = false"
+        @confirm="handleDelete">
+        <template #message>
+            <p>¿Estás seguro de eliminar a <strong>{{ deletingCustomer?.name }}</strong>?</p>
+            <p class="mt-2 text-gray-500">Perderás todas sus Sucursales, Áreas y Dispositivos. Esta acción es
+                irreversible.</p>
+        </template>
+    </UiConfirmModal>
 </template>
