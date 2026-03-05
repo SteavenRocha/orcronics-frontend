@@ -1,16 +1,16 @@
+import type { Customer } from '~/types/customer'
+import type { Meta, PaginatedResponse } from '~/types/pagination'
 import { customersService } from '~/services/customers.service'
-
-interface Customer {
-    id: string
-    name: string
-    is_active: boolean
-    created_at: string
-}
 
 export function useCustomers() {
     const customers = ref<Customer[]>([])
     const loading = ref(false)
     const searchQuery = ref('')
+    const currentPage = ref(1)
+    const meta = ref<Meta>({
+        total: 0, page: 1, limit: 10,
+        totalPages: 1, hasNextPage: false, hasPrevPage: false
+    })
 
     /* Busca en la tabla de clientes, sin ncesidad de llamar a la API */
     const filteredCustomers = computed(() =>
@@ -19,11 +19,13 @@ export function useCustomers() {
         )
     )
 
-    async function fetchCustomers() {
+    async function fetchCustomers(page = 1) {
         loading.value = true
         try {
-            const response = await customersService.getAll()
+            const response = await customersService.getAll(page) as PaginatedResponse<Customer>
             customers.value = response.data
+            meta.value = response.meta
+            currentPage.value = page
         } catch (e) {
             console.error('Error fetching customers:', e)
         } finally {
@@ -31,10 +33,16 @@ export function useCustomers() {
         }
     }
 
+    async function goToPage(page: number) {
+        if (page < 1 || page > meta.value.totalPages) return
+        await fetchCustomers(page)
+    }
+
     async function createCustomer(body: object) {
         try {
-            const newCustomer = await customersService.create(body) as Customer
-            customers.value.unshift(newCustomer) // agrega al inicio de la lista
+            await customersService.create(body)
+            /* customers.value.unshift(newCustomer) */ // agrega al inicio de la lista
+            await fetchCustomers(1)
         } catch (e) {
             console.error('Error creating customer:', e)
         }
@@ -69,6 +77,10 @@ export function useCustomers() {
         try {
             await customersService.remove(id)
             customers.value = customers.value.filter(c => c.id !== id)
+
+            if (customers.value.length === 0 && currentPage.value > 1) {
+                await fetchCustomers(currentPage.value - 1)
+            }
         } catch (e) {
             console.error('Error deleting customer:', e)
         }
@@ -79,10 +91,13 @@ export function useCustomers() {
         filteredCustomers,
         loading,
         searchQuery,
+        meta,
+        currentPage,
         fetchCustomers,
-        toggleStatus,
-        removeCustomer,
-        updateCustomer,
+        goToPage,
         createCustomer,
+        updateCustomer,
+        removeCustomer,
+        toggleStatus,
     }
 }
