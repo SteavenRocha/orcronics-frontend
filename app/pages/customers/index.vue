@@ -22,19 +22,18 @@ async function handleCreate(name: string) {
 
 // --- MODAL EDITAR ---
 const showEditModal = ref(false)
-const editingId = ref<string | null>(null)
-const editForm = ref({ name: '' })
+const editingCustomer = ref<{ id: string; name: string } | null>(null)
 
 function openEdit(customer: { id: string; name: string }) {
-    editingId.value = customer.id
-    editForm.value = { name: customer.name }
+    editingCustomer.value = customer
     showEditModal.value = true
 }
 
-async function saveEdit() {
-    if (!editingId.value) return
-    await updateCustomer(editingId.value, editForm.value)
+async function handleEdit(name: string) {
+    if (!editingCustomer.value) return
+    await updateCustomer(editingCustomer.value.id, { name })
     showEditModal.value = false
+    editingCustomer.value = null
 }
 
 // --- MODAL ELIMINAR ---
@@ -185,6 +184,10 @@ onMounted(fetchCustomers)
         </div>
     </div>
 
-    <!-- Modal -->
-    <CustomersCustomerFormModal :show="showCreateModal" @close="showCreateModal = false" @submit="handleCreate" />
+    <!-- Modales -->
+    <CustomersCustomerFormModal :show="showCreateModal" mode="create" @close="showCreateModal = false"
+        @submit="handleCreate" />
+
+    <CustomersCustomerFormModal :show="showEditModal" mode="edit" :initial-name="editingCustomer?.name"
+        @close="showEditModal = false" @submit="handleEdit" />
 </template>

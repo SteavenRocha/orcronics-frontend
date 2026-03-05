@@ -55,21 +55,22 @@ export function useCustomers() {
         }
     }
 
+    async function updateCustomer(id: string, body: object) {
+        try {
+            const updated = await customersService.update(id, body) as Customer
+            const index = customers.value.findIndex(c => c.id === id)
+            if (index !== -1) customers.value[index] = updated
+        } catch (e) {
+            console.error('Error updating customer:', e)
+        }
+    }
+
     async function removeCustomer(id: string) {
         try {
             await customersService.remove(id)
             await fetchCustomers()
         } catch (e) {
             console.error('Error deleting customer:', e)
-        }
-    }
-
-    async function updateCustomer(id: string, body: object) {
-        try {
-            await customersService.update(id, body)
-            await fetchCustomers()
-        } catch (e) {
-            console.error('Error updating customer:', e)
         }
     }
 

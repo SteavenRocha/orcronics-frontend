@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const props = defineProps<{
     show: boolean
+    mode?: 'create' | 'edit'
+    initialName?: string
 }>()
 
 const emit = defineEmits<{
@@ -10,6 +12,9 @@ const emit = defineEmits<{
 
 const form = ref({ name: '' })
 
+const title = computed(() => props.mode === 'edit' ? 'Editar Cliente' : 'Agregar Cliente')
+const submitLabel = computed(() => props.mode === 'edit' ? 'Guardar cambios' : 'Agregar')
+
 function handleSubmit() {
     if (!form.value.name.trim()) return
     emit('submit', form.value.name)
@@ -17,13 +22,16 @@ function handleSubmit() {
 }
 
 watch(() => props.show, (val) => {
-    if (!val) form.value.name = ''
+    if (val) {
+        form.value.name = props.initialName ?? ''
+    } else {
+        form.value.name = ''
+    }
 })
 </script>
 
 <template>
-    <UiBaseModal :show="show" title="Agregar Cliente" @close="emit('close')">
-
+    <UiBaseModal :show="show" :title="title" @close="emit('close')">
         <div class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Nombre</label>
@@ -35,8 +43,7 @@ watch(() => props.show, (val) => {
 
         <template #footer>
             <UiBaseButton label="Cancelar" variant="ghost" @click="emit('close')" />
-            <UiBaseButton label="Agregar" @click="handleSubmit" />
+            <UiBaseButton :label="submitLabel" @click="handleSubmit" />
         </template>
-
     </UiBaseModal>
 </template>
