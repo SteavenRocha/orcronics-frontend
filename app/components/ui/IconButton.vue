@@ -2,6 +2,7 @@
 defineProps<{
     title?: string
     variant?: 'default' | 'warning' | 'primary' | 'danger'
+    disabled?: boolean
 }>()
 
 const variants = {
@@ -13,7 +14,8 @@ const variants = {
 </script>
 
 <template>
-    <button :title="title" :class="['p-2 rounded-md transition-colors cursor-pointer', variants[variant ?? 'default']]">
+    <button :title="title" :disabled="disabled"
+        :class="['p-2 rounded-md transition-colors', disabled ? 'text-gray-300 cursor-not-allowed' : 'cursor-pointer ' + variants[variant ?? 'default']]">
         <slot />
     </button>
 </template>

@@ -5,11 +5,14 @@ const {
     filteredCustomers,
     loading,
     searchQuery,
+    meta,
+    currentPage,
     fetchCustomers,
-    toggleStatus,
-    removeCustomer,
-    updateCustomer,
+    goToPage,
     createCustomer,
+    updateCustomer,
+    removeCustomer,
+    toggleStatus,
 } = useCustomers()
 
 // --- MODAL CREAR ---
@@ -53,6 +56,10 @@ async function handleDelete() {
 }
 
 onMounted(fetchCustomers)
+
+watch(searchQuery, () => {
+    fetchCustomers(1)
+})
 </script>
 
 <template>
@@ -182,6 +189,10 @@ onMounted(fetchCustomers)
 
                 </tbody>
             </table>
+            <!-- PAGINACIÓN -->
+            <UiPagination v-if="meta.totalPages > 1" :current-page="currentPage" :total-pages="meta.totalPages"
+                :total="meta.total" :limit="meta.limit" :has-next-page="meta.hasNextPage"
+                :has-prev-page="meta.hasPrevPage" @change="goToPage" />
         </div>
     </div>
 
