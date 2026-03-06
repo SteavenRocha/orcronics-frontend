@@ -15,7 +15,7 @@ const variants = {
 
 <template>
     <button :title="title" :disabled="disabled"
-        :class="['p-2 rounded-md transition-colors', disabled ? 'text-gray-300 cursor-not-allowed' : 'cursor-pointer ' + variants[variant ?? 'default']]">
+        :class="['p-1.5 rounded-md transition-colors', disabled ? 'text-gray-300 cursor-not-allowed' : 'cursor-pointer ' + variants[variant ?? 'default']]">
         <slot />
     </button>
 </template>
