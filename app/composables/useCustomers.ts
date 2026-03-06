@@ -76,10 +76,10 @@ export function useCustomers() {
     async function removeCustomer(id: string) {
         try {
             await customersService.remove(id)
-            customers.value = customers.value.filter(c => c.id !== id)
-
-            if (customers.value.length === 0 && currentPage.value > 1) {
+            if (customers.value.length === 1 && currentPage.value > 1) {
                 await fetchCustomers(currentPage.value - 1)
+            } else {
+                await fetchCustomers(currentPage.value)
             }
         } catch (e) {
             console.error('Error deleting customer:', e)
