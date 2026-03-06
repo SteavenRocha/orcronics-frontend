@@ -1,9 +1,26 @@
 import { branchesService } from '~/services/branches.service'
+import { customersService } from '~/services/customers.service'
 import type { Branch } from '~/types/branch'
-import type { Meta } from '~/types/pagination'
-import type { QueryResponse } from '~/types/pagination'
+import type { Customer } from '~/types/customer'
+import type { Meta, QueryResponse } from '~/types/pagination'
 
 export function useBranches(customerId: string) {
+    // --- CLIENTE ---
+    const customer = ref<Customer | null>(null)
+    const customerLoading = ref(false)
+
+    async function fetchCustomer() {
+        customerLoading.value = true
+        try {
+            customer.value = await customersService.getOne(customerId)
+        } catch (e) {
+            console.error('Error fetching customer:', e)
+        } finally {
+            customerLoading.value = false
+        }
+    }
+
+    // --- SUCURSALES ---
     const branches = ref<Branch[]>([])
     const loading = ref(false)
     const searchQuery = ref('')
@@ -46,12 +63,15 @@ export function useBranches(customerId: string) {
     })
 
     return {
+        customer,
+        customerLoading,
         branches,
         filteredBranches,
         loading,
         searchQuery,
         meta,
         currentPage,
+        fetchCustomer,
         fetchBranches,
         goToPage,
     }

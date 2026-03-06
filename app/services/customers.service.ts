@@ -5,6 +5,9 @@ export const customersService = {
     getAll: (page = 1, limit = 10, search = '') =>
         $fetch<QueryResponse<Customer>>(`${useApi()}/customers?page=${page}&limit=${limit}&search=${search}`),
 
+    getOne: (id: string) =>
+        $fetch<Customer>(`${useApi()}/customers/${id}`),
+
     create: (body: object) =>
         $fetch<Customer>(`${useApi()}/customers`, { method: 'POST', body }),
 

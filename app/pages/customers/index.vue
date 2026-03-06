@@ -63,6 +63,7 @@ onMounted(fetchCustomers)
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-semibold text-gray-900">Clientes</h1>
+                <p class="text-sm text-gray-500 mt-1">Gestiona los clientes empresariales y sus datos</p>
             </div>
             <UiBaseButton label="Agregar Cliente" variant="primary" @click="showCreateModal = true">
                 <template #icon>
