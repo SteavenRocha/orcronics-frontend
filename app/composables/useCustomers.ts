@@ -53,7 +53,7 @@ export function useCustomers() {
             const updated = await (is_active
                 ? customersService.deactivate(id)
                 : customersService.activate(id)
-            ) as Customer
+            )
 
             const index = customers.value.findIndex(c => c.id === id)
             if (index !== -1) customers.value[index] = updated
@@ -65,7 +65,7 @@ export function useCustomers() {
 
     async function updateCustomer(id: string, body: object) {
         try {
-            const updated = await customersService.update(id, body) as Customer
+            const updated = await customersService.update(id, body)
             const index = customers.value.findIndex(c => c.id === id)
             if (index !== -1) customers.value[index] = updated
         } catch (e) {

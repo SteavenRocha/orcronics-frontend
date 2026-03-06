@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Branch } from '~/types/branch'
+
 const route = useRoute()
 const customerId = route.params.customerId as string
 
@@ -14,8 +16,62 @@ const {
     currentPage,
     fetchCustomer,
     fetchBranches,
+    createBranch,
+    updateBranch,
+    removeBranch,
     goToPage,
 } = useBranches(customerId)
+
+// --- MODAL CREAR ---
+const showCreateModal = ref(false)
+
+async function handleCreate(data: { name: string; address: string; contact_name: string; contact_phone: string }) {
+    await createBranch({
+        name: data.name,
+        address: data.address || null,
+        contact_name: data.contact_name || null,
+        contact_phone: data.contact_phone || null,
+        customer_id: customerId
+    })
+    showCreateModal.value = false
+}
+
+// --- MODAL EDITAR ---
+const showEditModal = ref(false)
+const editingBranch = ref<Branch | null>(null)
+
+function openEdit(branch: Branch) {
+    editingBranch.value = branch
+    showEditModal.value = true
+}
+
+async function handleEdit(data: { name: string; address: string; contact_name: string; contact_phone: string }) {
+    if (!editingBranch.value) return
+    await updateBranch(editingBranch.value.id, {
+        name: data.name,
+        address: data.address || null,
+        contact_name: data.contact_name || null,
+        contact_phone: data.contact_phone || null,
+    })
+    showEditModal.value = false
+    editingBranch.value = null
+}
+
+// --- MODAL ELIMINAR ---
+const showDeleteModal = ref(false)
+const deletingBranch = ref<Branch | null>(null)
+
+function openDelete(branch: Branch) {
+    deletingBranch.value = branch
+    showDeleteModal.value = true
+}
+
+async function handleDelete() {
+    if (!deletingBranch.value) return
+    await removeBranch(deletingBranch.value.id)
+    showDeleteModal.value = false
+    deletingBranch.value = null
+}
 
 onMounted(() => {
     fetchCustomer()
@@ -28,27 +84,30 @@ onMounted(() => {
 
         <!-- HEADER CLIENTE -->
         <div class="mb-15 bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div class="h-20 bg-linear-to-r from-white to-primary" />
-            <div class="p-5 flex items-end gap-4">
+            <div class="p-5 flex items-center gap-4">
                 <div :style="customer ? { backgroundColor: getAvatarColor(customer.name) } : {}"
                     class="w-16 h-16 rounded-xl flex items-center justify-center text-white text-3xl shrink-0 border-2 border-white shadow-md">
                     {{ customer ? getInitials(customer.name) : '' }}
                 </div>
-                <div class="pb-1">
+                <div>
                     <div v-if="customerLoading" class="animate-pulse space-y-2">
                         <div class="h-6 bg-gray-200 rounded w-40" />
                         <div class="h-4 bg-gray-100 rounded w-64" />
                     </div>
                     <template v-else>
-                        <h1 class="text-2xl font-semibold text-gray-900">{{ customer?.name }}</h1>
-                        <div class="flex items-center gap-3 mt-1">
-                            <span class="text-xs text-gray-400">ID: {{ customer?.id }}</span>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-2xl font-semibold text-gray-900">{{ customer?.name }}</h1>
                             <span
                                 :class="['px-2 py-0.5 rounded-full text-xs font-medium', customer?.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
                                 {{ customer?.is_active ? 'Activo' : 'Inactivo' }}
                             </span>
+                        </div>
+
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs text-gray-400">ID: {{ customer?.id }}</span>
+                            <span class="text-xs text-gray-400">|</span>
                             <span class="text-xs text-gray-400">
-                                Joined {{ customer ? formatDate(customer.created_at) : '' }}
+                                Registrado el {{ customer ? formatDate(customer.created_at) : '' }}
                             </span>
                         </div>
                     </template>
@@ -62,7 +121,7 @@ onMounted(() => {
                 <h1 class="text-3xl font-semibold text-gray-900">Sucursales</h1>
                 <p class="text-sm text-gray-500 mt-0.5">Gestiona las sucursales de este cliente</p>
             </div>
-            <UiBaseButton label="Agregar Sucursal" variant="primary">
+            <UiBaseButton label="Agregar Sucursal" variant="primary" @click="showCreateModal = true">
                 <template #icon>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -101,7 +160,19 @@ onMounted(() => {
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-gray-500">{{ branch.address ?? '—' }}</td>
+                    <td class="px-6 py-4 text-gray-500">
+                        <div class="flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" aria-hidden="true">
+                                <path
+                                    d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                                </path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <p>{{ branch.address ?? '—' }}</p>
+                        </div>
+                    </td>
                     <td class="px-6 py-4">
                         <template v-if="branch.contact_name || branch.contact_phone">
                             <p class="text-gray-900">{{ branch.contact_name ?? '—' }}</p>
@@ -111,8 +182,8 @@ onMounted(() => {
                     </td>
                     <td class="px-6 py-4 text-gray-500">{{ formatDate(branch.created_at) }}</td>
                     <td class="px-6 py-4" @click.stop>
-                        <div class="flex items-center justify-end gap-2">
-                            <UiIconButton title="Editar" variant="primary">
+                        <div class="flex items-center justify-start gap-2">
+                            <UiIconButton title="Editar" variant="primary" @click="openEdit(branch)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -120,7 +191,7 @@ onMounted(() => {
                                         d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
                                 </svg>
                             </UiIconButton>
-                            <UiIconButton title="Eliminar" variant="danger">
+                            <UiIconButton title="Eliminar" variant="danger" @click="openDelete(branch)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -136,6 +207,20 @@ onMounted(() => {
                 </tr>
             </template>
         </UiDataTable>
-
     </div>
+
+    <!-- Modales -->
+    <BranchesBranchFormModal :show="showCreateModal" mode="create" @close="showCreateModal = false"
+        @submit="handleCreate" />
+
+    <BranchesBranchFormModal :show="showEditModal" mode="edit" :initial-data="editingBranch ?? undefined"
+        @close="showEditModal = false" @submit="handleEdit" />
+
+    <UiConfirmModal :show="showDeleteModal" title="Eliminar Sucursal" @close="showDeleteModal = false"
+        @confirm="handleDelete">
+        <template #message>
+            <p>¿Estás seguro de eliminar a <strong>{{ deletingBranch?.name }}</strong>?</p>
+            <p class="mt-2 text-gray-500">Perderás todas sus Áreas y Dispositivos. Esta acción es irreversible.</p>
+        </template>
+    </UiConfirmModal>
 </template>

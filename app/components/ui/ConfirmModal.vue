@@ -3,6 +3,8 @@ defineProps<{
     show: boolean
     title: string
     confirmLabel?: string
+    hideCancel?: boolean
+    confirmVariant?: 'primary' | 'secondary' | 'danger' | 'ghost'
 }>()
 
 const emit = defineEmits<{
@@ -28,8 +30,9 @@ const emit = defineEmits<{
         </div>
 
         <template #footer>
-            <UiBaseButton label="Cancelar" variant="ghost" @click="emit('close')" />
-            <UiBaseButton :label="confirmLabel ?? 'Eliminar'" variant="danger" @click="emit('confirm')" />
+            <UiBaseButton v-if="!hideCancel" label="Cancelar" variant="ghost" @click="emit('close')" />
+            <UiBaseButton :label="confirmLabel ?? 'Eliminar'" :variant="confirmVariant ?? 'danger'"
+                @click="emit('confirm')" />
         </template>
 
     </UiBaseModal>

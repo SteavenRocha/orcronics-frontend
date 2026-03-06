@@ -13,8 +13,12 @@ export function useBranches(customerId: string) {
         customerLoading.value = true
         try {
             customer.value = await customersService.getOne(customerId)
-        } catch (e) {
-            console.error('Error fetching customer:', e)
+        } catch (e: any) {
+            if (e?.response?.status === 404) {
+                await navigateTo('/customers')
+            } else {
+                console.error(e)
+            }
         } finally {
             customerLoading.value = false
         }
@@ -39,7 +43,7 @@ export function useBranches(customerId: string) {
     async function fetchBranches(page = 1) {
         loading.value = true
         try {
-            const response = await branchesService.getAllByCustomer(customerId, page) as QueryResponse<Branch>
+            const response = await branchesService.getAllByCustomer(customerId, page, 10, searchQuery.value)
             branches.value = response.data
             meta.value = response.meta
             currentPage.value = page
@@ -50,16 +54,45 @@ export function useBranches(customerId: string) {
         }
     }
 
+    async function createBranch(body: object) {
+        try {
+            await branchesService.create(body)
+            await fetchBranches(1)
+        } catch (e) {
+            console.error('Error creating branch:', e)
+        }
+    }
+
+    async function updateBranch(id: string, body: object) {
+        try {
+            const updated = await branchesService.update(id, body)
+            const index = branches.value.findIndex(b => b.id === id)
+            if (index !== -1) branches.value[index] = updated
+        } catch (e) {
+            console.error('Error updating branch:', e)
+        }
+    }
+
+    async function removeBranch(id: string) {
+        try {
+            await branchesService.remove(id)
+            if (branches.value.length === 1 && currentPage.value > 1) {
+                await fetchBranches(currentPage.value - 1)
+            } else {
+                await fetchBranches(currentPage.value)
+            }
+        } catch (e) {
+            console.error('Error deleting branch:', e)
+        }
+    }
+
     async function goToPage(page: number) {
         if (page < 1 || page > meta.value.totalPages) return
         await fetchBranches(page)
     }
 
-    let searchTimeout: ReturnType<typeof setTimeout>
-    watch(searchQuery, (val) => {
-        clearTimeout(searchTimeout)
-        if (val.length > 0 && val.length < 3) return
-        searchTimeout = setTimeout(() => fetchBranches(1), 300)
+    watch(searchQuery, () => {
+        fetchBranches(1)
     })
 
     return {
@@ -73,6 +106,9 @@ export function useBranches(customerId: string) {
         currentPage,
         fetchCustomer,
         fetchBranches,
+        createBranch,
+        updateBranch,
+        removeBranch,
         goToPage,
     }
 }

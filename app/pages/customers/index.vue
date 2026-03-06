@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Customer } from '~/types/customer'
+
 useHead({ title: 'Clientes | Orcronics' })
 
 const {
@@ -55,6 +57,17 @@ async function handleDelete() {
     deletingCustomer.value = null
 }
 
+// --- MODAL INACTIVO ---
+const showInactiveModal = ref(false)
+
+function handleRowClick(id: string, is_active: boolean) {
+    if (!is_active) {
+        showInactiveModal.value = true
+        return
+    }
+    navigateTo(`/customers/${id}`)
+}
+
 onMounted(fetchCustomers)
 </script>
 
@@ -85,7 +98,7 @@ onMounted(fetchCustomers)
             <template #rows>
                 <tr v-for="customer in filteredCustomers" :key="customer.id"
                     class="hover:bg-gray-50 transition-colors cursor-pointer"
-                    @click="navigateTo(`/customers/${customer.id}`)">
+                    @click="handleRowClick(customer.id, customer.is_active)">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <div :style="{ backgroundColor: getAvatarColor(customer.name) }"
@@ -156,6 +169,15 @@ onMounted(fetchCustomers)
             <p>¿Estás seguro de eliminar a <strong>{{ deletingCustomer?.name }}</strong>?</p>
             <p class="mt-2 text-gray-500">Perderás todas sus Sucursales, Áreas y Dispositivos. Esta acción es
                 irreversible.</p>
+        </template>
+    </UiConfirmModal>
+
+    <UiConfirmModal :show="showInactiveModal" title="Cliente inactivo" confirm-label="Entendido"
+        confirm-variant="secondary" :hide-cancel="true" @close="showInactiveModal = false"
+        @confirm="showInactiveModal = false">
+        <template #message>
+            <p>Este cliente esta <strong>desactivado</strong>. Debes activarlo para acceder a sus detalles,
+                sucursales, áreas y dispositivos.</p>
         </template>
     </UiConfirmModal>
 </template>
