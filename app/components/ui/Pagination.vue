@@ -21,7 +21,7 @@ const to = computed(() => Math.min(props.currentPage * props.limit, props.total)
 
         <!-- INFO -->
         <p class="text-sm text-gray-500">
-            Mostrando <span class="font-medium text-gray-700">{{ from }}</span> de
+            Mostrando <span class="font-medium text-gray-700">{{ from }}</span> al
             <span class="font-medium text-gray-700">{{ to }}</span> de
             <span class="font-medium text-gray-700">{{ total }}</span> registros
         </p>
