@@ -1,9 +1,9 @@
-import type { PaginatedResponse } from '~/types/pagination'
+import type { QueryResponse } from '~/types/pagination'
 import type { Customer } from '~/types/customer'
 
 export const customersService = {
-    getAll: (page = 1, limit = 10) =>
-        $fetch<PaginatedResponse<Customer>>(`${useApi()}/customers?page=${page}&limit=${limit}`),
+    getAll: (page = 1, limit = 10, search = '') =>
+        $fetch<QueryResponse<Customer>>(`${useApi()}/customers?page=${page}&limit=${limit}&search=${search}`),
 
     create: (body: object) =>
         $fetch<Customer>(`${useApi()}/customers`, { method: 'POST', body }),

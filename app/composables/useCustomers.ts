@@ -1,5 +1,5 @@
 import type { Customer } from '~/types/customer'
-import type { Meta, PaginatedResponse } from '~/types/pagination'
+import type { Meta } from '~/types/pagination'
 import { customersService } from '~/services/customers.service'
 
 export function useCustomers() {
@@ -22,7 +22,7 @@ export function useCustomers() {
     async function fetchCustomers(page = 1) {
         loading.value = true
         try {
-            const response = await customersService.getAll(page) as PaginatedResponse<Customer>
+            const response = await customersService.getAll(page, 10, searchQuery.value)
             customers.value = response.data
             meta.value = response.meta
             currentPage.value = page
@@ -85,6 +85,10 @@ export function useCustomers() {
             console.error('Error deleting customer:', e)
         }
     }
+
+    watch(searchQuery, () => {
+        fetchCustomers(1)
+    })
 
     return {
         customers,

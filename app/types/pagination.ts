@@ -7,7 +7,7 @@ export interface Meta {
     hasPrevPage: boolean
 }
 
-export interface PaginatedResponse<T> {
+export interface QueryResponse<T> {
     data: T[]
     meta: Meta
 }

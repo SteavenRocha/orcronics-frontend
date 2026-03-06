@@ -17,11 +17,11 @@ const to = computed(() => Math.min(props.currentPage * props.limit, props.total)
 </script>
 
 <template>
-    <div class="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+    <div class="flex items-center justify-between px-6 py-4 border-t bg-gray-50 border-gray-200">
 
         <!-- INFO -->
         <p class="text-sm text-gray-500">
-            Mostrando <span class="font-medium text-gray-700">{{ from }}</span> a
+            Mostrando <span class="font-medium text-gray-700">{{ from }}</span> de
             <span class="font-medium text-gray-700">{{ to }}</span> de
             <span class="font-medium text-gray-700">{{ total }}</span> registros
         </p>
