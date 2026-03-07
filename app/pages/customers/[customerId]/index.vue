@@ -150,10 +150,10 @@ onMounted(() => {
                             <p>{{ branch.address ?? '—' }}</p>
                         </div>
                     </td>
-                    <td class="px-6 py-4 flex flex-col gap-1">
+                    <td class="px-6 py-4">
                         <template v-if="branch.contact_name || branch.contact_phone">
                             <p class="text-gray-900">{{ branch.contact_name ?? '—' }}</p>
-                            <div class="flex items-center gap-2 text-gray-400">
+                            <div class="flex items-center gap-2 text-gray-400 mt-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-phone" aria-hidden="true">
