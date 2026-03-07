@@ -7,7 +7,7 @@
                 <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 me-3" alt="Flowbite Logo" />
                 <span class="self-center text-lg text-heading font-semibold whitespace-nowrap">Flowbite</span>
             </a>
-            <ul class="space-y-2 mt-10 font-medium">
+            <ul class="space-y-1.5 mt-10 font-medium">
                 <li>
                     <UiSideBarLink to="/" label="Dashboard" :exact="true">
                         <template #icon>

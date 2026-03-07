@@ -14,7 +14,7 @@ const isActive = computed(() => {
 </script>
 
 <template>
-    <NuxtLink :to="to" :class="['flex items-center px-3 py-3 rounded-md group transition-colors',
+    <NuxtLink :to="to" :class="['flex items-center px-3 py-3.5 rounded-md group transition-colors',
         isActive
             ? 'bg-neutral-tertiary text-primary'
             : 'text-body hover:bg-neutral-tertiary hover:text-primary'

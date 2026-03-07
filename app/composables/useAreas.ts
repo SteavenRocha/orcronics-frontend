@@ -1,10 +1,10 @@
-import { branchesService } from '~/services/branches.service'
+import { areasService } from '~/services/areas.service'
 import { customersService } from '~/services/customers.service'
-import type { Branch } from '~/types/branch'
+import type { Area } from '~/types/area'
 import type { Customer } from '~/types/customer'
 import type { Meta } from '~/types/pagination'
 
-export function useBranches(customerId: string) {
+export function useAreas(customerId: string, branchId: string) {
     // --- CLIENTE ---
     const customer = ref<Customer | null>(null)
     const customerLoading = ref(false)
@@ -24,8 +24,8 @@ export function useBranches(customerId: string) {
         }
     }
 
-    // --- SUCURSALES ---
-    const branches = ref<Branch[]>([])
+    // --- AREAS ---
+    const areas = ref<Area[]>([])
     const loading = ref(false)
     const searchQuery = ref('')
     const currentPage = ref(1)
@@ -34,81 +34,87 @@ export function useBranches(customerId: string) {
         totalPages: 1, hasNextPage: false, hasPrevPage: false
     })
 
-    const filteredBranches = computed(() =>
-        branches.value.filter(b =>
+    const filteredAreas = computed(() =>
+        areas.value.filter(b =>
             b.name.toLowerCase().includes(searchQuery.value.toLowerCase())
         )
     )
 
-    async function fetchBranches(page = 1) {
+    async function fetchAreas(page = 1) {
         loading.value = true
         try {
-            const response = await branchesService.getAllByCustomer(customerId, page, 10, searchQuery.value)
-            branches.value = response.data
+            const response = await areasService.getAllByBranch(branchId, page, 10, searchQuery.value)
+            areas.value = response.data
             meta.value = response.meta
             currentPage.value = page
         } catch (e) {
-            console.error('Error fetching branches:', e)
+            console.error('Error fetching areas:', e)
         } finally {
             loading.value = false
         }
     }
 
-    async function createBranch(body: object) {
+    async function createArea(body: object) {
         try {
-            await branchesService.create(body)
-            await fetchBranches(1)
+            await areasService.create(body)
+            await fetchAreas(1)
         } catch (e) {
-            console.error('Error creating branch:', e)
+            console.error('Error creating area:', e)
         }
     }
 
-    async function updateBranch(id: string, body: object) {
+    async function updateArea(id: string, body: object) {
         try {
-            const updated = await branchesService.update(id, body)
-            const index = branches.value.findIndex(b => b.id === id)
-            if (index !== -1) branches.value[index] = updated
-        } catch (e) {
-            console.error('Error updating branch:', e)
-        }
-    }
-
-    async function removeBranch(id: string) {
-        try {
-            await branchesService.remove(id)
-            if (branches.value.length === 1 && currentPage.value > 1) {
-                await fetchBranches(currentPage.value - 1)
-            } else {
-                await fetchBranches(currentPage.value)
+            const updated = await areasService.update(id, body)
+            const index = areas.value.findIndex(b => b.id === id)
+            if (index !== -1) {
+                const current = areas.value[index]
+                areas.value[index] = {
+                    ...updated,
+                    device_count: current?.device_count ?? 0
+                }
             }
         } catch (e) {
-            console.error('Error deleting branch:', e)
+            console.error('Error updating area:', e)
+        }
+    }
+
+    async function removeArea(id: string) {
+        try {
+            await areasService.remove(id)
+            if (areas.value.length === 1 && currentPage.value > 1) {
+                await fetchAreas(currentPage.value - 1)
+            } else {
+                await fetchAreas(currentPage.value)
+            }
+        } catch (e) {
+            console.error('Error deleting area:', e)
         }
     }
 
     async function goToPage(page: number) {
         if (page < 1 || page > meta.value.totalPages) return
-        await fetchBranches(page)
+        await fetchAreas(page)
     }
 
     watch(searchQuery, () => {
-        fetchBranches(1)
+        fetchAreas(1)
     })
 
     return {
         customer,
         customerLoading,
-        branches,
-        filteredBranches,
+        areas,
+        filteredAreas,
         loading,
         searchQuery,
         meta,
         currentPage,
         fetchCustomer,
-        fetchBranches,
-        createBranch,
-        updateBranch,
-        removeBranch,
+        fetchAreas,
+        createArea,
+        updateArea,
+        removeArea,
         goToPage,
     }
 }

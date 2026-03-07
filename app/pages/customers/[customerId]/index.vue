@@ -199,7 +199,8 @@ onMounted(() => {
         @confirm="handleDelete">
         <template #message>
             <p>¿Estás seguro de eliminar a <strong>{{ deletingBranch?.name }}</strong>?</p>
-            <p class="mt-2 text-gray-500">Perderás todas sus Áreas y Dispositivos. Esta acción es irreversible.</p>
+            <p class="mt-2 text-gray-500">Perderás todas sus Áreas y Dispositivos asociados. Esta acción es
+                irreversible.</p>
         </template>
     </UiConfirmModal>
 </template>

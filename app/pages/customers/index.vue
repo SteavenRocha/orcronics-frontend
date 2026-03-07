@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Customer } from '~/types/customer'
-
 useHead({ title: 'Clientes | Orcronics' })
 
 const {
@@ -167,7 +165,7 @@ onMounted(fetchCustomers)
         @confirm="handleDelete">
         <template #message>
             <p>¿Estás seguro de eliminar a <strong>{{ deletingCustomer?.name }}</strong>?</p>
-            <p class="mt-2 text-gray-500">Perderás todas sus Sucursales, Áreas y Dispositivos. Esta acción es
+            <p class="mt-2 text-gray-500">Perderás todas sus Sucursales, Áreas y Dispositivos asociados. Esta acción es
                 irreversible.</p>
         </template>
     </UiConfirmModal>
