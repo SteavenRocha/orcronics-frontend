@@ -5,6 +5,9 @@ export const areasService = {
     getAllByBranch: (branchId: string, page = 1, limit = 10, search = '') =>
         $fetch<QueryResponse<Area>>(`${useApi()}/areas/branch/${branchId}?page=${page}&limit=${limit}&search=${search}`),
 
+    getOne: (id: string) =>
+        $fetch<Area>(`${useApi()}/areas/${id}`),
+
     create: (body: object) =>
         $fetch<Area>(`${useApi()}/areas`, { method: 'POST', body }),
 

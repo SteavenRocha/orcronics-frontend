@@ -22,6 +22,11 @@ const {
     goToPage,
 } = useBranches(customerId)
 
+// --- BREADCRUMBS ---
+const { items: breadcrumbs } = useBreadcrumb(
+    computed(() => ({ customer: customer.value?.name }))
+)
+
 // --- MODAL CREAR ---
 const showCreateModal = ref(false)
 
@@ -81,6 +86,8 @@ onMounted(() => {
 
 <template>
     <div class="space-y-6">
+        <!-- BREADCRUMBS -->
+        <UiBreadcrumb :items="breadcrumbs" />
 
         <!-- HEADER CLIENTE -->
         <CustomersCustomerHeader :customer="customer" :loading="customerLoading" />
@@ -198,7 +205,7 @@ onMounted(() => {
     <UiConfirmModal :show="showDeleteModal" title="Eliminar Sucursal" @close="showDeleteModal = false"
         @confirm="handleDelete">
         <template #message>
-            <p>¿Estás seguro de eliminar a <strong>{{ deletingBranch?.name }}</strong>?</p>
+            <p>¿Estás seguro de eliminar la sucursal: <strong>{{ deletingBranch?.name }}</strong>?</p>
             <p class="mt-2 text-gray-500">Perderás todas sus Áreas y Dispositivos asociados. Esta acción es
                 irreversible.</p>
         </template>

@@ -15,6 +15,9 @@ const {
     toggleStatus,
 } = useCustomers()
 
+// --- BREADCRUMBS ---
+const { items: breadcrumbs } = useBreadcrumb()
+
 // --- MODAL CREAR ---
 const showCreateModal = ref(false)
 
@@ -70,7 +73,10 @@ onMounted(fetchCustomers)
 </script>
 
 <template>
-    <div class="space-y-10">
+    <div class="space-y-6">
+        <!-- BREADCRUMBS -->
+        <UiBreadcrumb :items="breadcrumbs" />
+
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-semibold text-gray-900">Clientes</h1>
@@ -164,7 +170,7 @@ onMounted(fetchCustomers)
     <UiConfirmModal :show="showDeleteModal" title="Eliminar Cliente" @close="showDeleteModal = false"
         @confirm="handleDelete">
         <template #message>
-            <p>¿Estás seguro de eliminar a <strong>{{ deletingCustomer?.name }}</strong>?</p>
+            <p>¿Estás seguro de eliminar al cliente: <strong>{{ deletingCustomer?.name }}</strong>?</p>
             <p class="mt-2 text-gray-500">Perderás todas sus Sucursales, Áreas y Dispositivos asociados. Esta acción es
                 irreversible.</p>
         </template>

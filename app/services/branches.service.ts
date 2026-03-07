@@ -5,6 +5,9 @@ export const branchesService = {
     getAllByCustomer: (customerId: string, page = 1, limit = 10, search = '') =>
         $fetch<QueryResponse<Branch>>(`${useApi()}/branches/customer/${customerId}?page=${page}&limit=${limit}&search=${search}`),
 
+    getOne: (id: string) =>
+        $fetch<Branch>(`${useApi()}/branches/${id}`),
+
     create: (body: object) =>
         $fetch<Branch>(`${useApi()}/branches`, { method: 'POST', body }),
 

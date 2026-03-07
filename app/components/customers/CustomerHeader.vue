@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden mb-10">
         <div class="p-5 flex items-center gap-4">
 
             <div :style="customer ? { backgroundColor: getAvatarColor(customer.name) } : {}"

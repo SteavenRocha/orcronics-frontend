@@ -9,19 +9,29 @@ useHead({ title: 'Areas | Orcronics' })
 
 const {
     customer,
-    customerLoading,
     areas,
+    branch,
+    customerLoading,
     loading,
     searchQuery,
     meta,
     currentPage,
     fetchCustomer,
     fetchAreas,
+    fetchBranch,
     createArea,
     updateArea,
     removeArea,
     goToPage,
 } = useAreas(customerId, branchId)
+
+// -- BREADCRUMBS --
+const { items: breadcrumbs } = useBreadcrumb(
+    computed(() => ({
+        customer: customer.value?.name,
+        branch: branch.value?.name
+    }))
+)
 
 // --- MODAL CREAR ---
 const showCreateModal = ref(false)
@@ -73,11 +83,14 @@ async function handleDelete() {
 onMounted(() => {
     fetchCustomer()
     fetchAreas()
+    fetchBranch()
 })
 </script>
 
 <template>
     <div class="space-y-6">
+        <!-- BREADCRUMBS -->
+        <UiBreadcrumb :items="breadcrumbs" />
 
         <!-- HEADER CLIENTE -->
         <CustomersCustomerHeader :customer="customer" :loading="customerLoading" />
@@ -85,8 +98,8 @@ onMounted(() => {
         <!-- SUCURSALES HEADER -->
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-semibold text-gray-900">Areas</h1>
-                <p class="text-sm text-gray-500 mt-0.5">Gestiona las areas de este cliente</p>
+                <h1 class="text-3xl font-semibold text-gray-900">Áreas</h1>
+                <p class="text-sm text-gray-500 mt-0.5">Gestiona las áreas de este cliente</p>
             </div>
             <UiBaseButton label="Agregar Area" variant="primary" @click="showCreateModal = true">
                 <template #icon>
@@ -105,7 +118,7 @@ onMounted(() => {
             :current-page="currentPage" search-placeholder="Buscar areas..." @page-change="goToPage">
             <template #rows>
                 <tr v-for="area in areas" :key="area.id" class="hover:bg-gray-50 transition-colors cursor-pointer"
-                    @click="navigateTo(`/customers/${customerId}/branches/${area.id}`)">
+                    @click="navigateTo(`/customers/${customerId}/branches/${branchId}/areas/${area.id}`)">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <div class="flex items-center justify-center text-primary">
@@ -175,7 +188,7 @@ onMounted(() => {
     <UiConfirmModal :show="showDeleteModal" title="Eliminar Area" @close="showDeleteModal = false"
         @confirm="handleDelete">
         <template #message>
-            <p>¿Estás seguro de eliminar a <strong>{{ deletingArea?.name }}</strong>?</p>
+            <p>¿Estás seguro de eliminar el área: <strong>{{ deletingArea?.name }}</strong>?</p>
             <p class="mt-2 text-gray-500">Perderás todas sus Dispositivos asociados. Esta acción es irreversible.</p>
         </template>
     </UiConfirmModal>
