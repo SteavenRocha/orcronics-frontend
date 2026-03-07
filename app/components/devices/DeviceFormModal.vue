@@ -29,6 +29,8 @@ const form = ref({
     notes: '',
 })
 
+const showPassword = ref(false)
+
 const metadata = ref<{ field: string; value: string }[]>([])
 
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -59,6 +61,7 @@ function handleSubmit() {
 
 watch(() => props.show, (val) => {
     if (val) {
+        showPassword.value = false
         form.value = {
             name: props.initialData?.name ?? '',
             type: props.initialData?.type ?? '',
@@ -114,8 +117,32 @@ watch(() => props.show, (val) => {
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Contraseña</label>
-                    <input v-model="form.password" type="password" placeholder="Contraseña"
-                        class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
+                    <div class="relative">
+                        <input v-model="form.password" :type="showPassword ? 'text' : 'password'"
+                            placeholder="Contraseña"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary pr-9" />
+                        <button type="button"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            @click="showPassword = !showPassword">
+                            <svg v-if="showPassword" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                                <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                                <path
+                                    d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                                <path d="m2 2 20 20" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -44,7 +44,7 @@ const sizes = {
                         </div>
 
                         <!-- CONTENT -->
-                        <div class="px-6 py-4">
+                        <div class="overflow-y-auto max-h-[60vh] px-6 py-4 personalized-scroll">
                             <slot />
                         </div>
 

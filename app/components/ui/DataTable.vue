@@ -37,7 +37,7 @@ const searchQuery = defineModel<string>('search', { default: '' })
         </div>
 
         <!-- TABLA -->
-        <div class="overflow-y-auto max-h-[calc(100vh-350px)] table-scroll">
+        <div class="overflow-y-auto max-h-[calc(100vh-400px)] personalized-scroll">
             <table class="w-full text-sm">
 
                 <!-- ENCABEZADOS -->

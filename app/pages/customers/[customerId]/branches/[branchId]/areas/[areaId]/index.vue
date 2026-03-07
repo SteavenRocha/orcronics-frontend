@@ -135,7 +135,7 @@ onMounted(() => {
             :current-page="currentPage" search-placeholder="Buscar dispositivos..." @page-change="goToPage">
             <template #rows>
                 <tr v-for="device in devices" :key="device.id" class="hover:bg-gray-50 transition-colors cursor-pointer"
-                    @click="navigateTo(`/customers/${customerId}/branches/${device.id}/areas/${device.id}`)">
+                    @click="openEdit(device)">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <div class="flex items-center justify-center text-primary">
