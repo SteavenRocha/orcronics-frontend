@@ -83,7 +83,7 @@ onMounted(() => {
 
         <SharedSidebar />
 
-        <main class="sm:ml-64 mt-14 bg-gray-50 flex-1 overflow-y-auto p-6">
+        <main class="sm:ml-64 mt-14 bg-gray-50 flex-1 overflow-y-auto p-8">
             <div class="max-w-7xl mx-auto">
                 <slot />
             </div>

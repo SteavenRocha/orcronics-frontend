@@ -128,9 +128,10 @@ watch(() => props.show, (val) => {
 
             <!-- METADATA -->
             <div>
-                <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center mb-3 gap-3">
                     <label class="block text-sm font-medium text-gray-700">Metadata</label>
-                    <button type="button" class="text-xs text-primary hover:underline flex items-center gap-1"
+                    <button type="button"
+                        class="text-xs cursor-pointer text-primary hover:bg-gray-50 flex items-center gap-1 border rounded-md p-1"
                         @click="addMetadata">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -141,23 +142,27 @@ watch(() => props.show, (val) => {
                     </button>
                 </div>
 
-                <div v-if="metadata.length === 0" class="text-xs text-gray-400 py-2">
+                <div v-if="metadata.length === 0"
+                    class="text-sm text-gray-500 border border-gray-200 py-2 px-3 rounded-md">
                     No hay metadata. Haz clic en "Agregar campo" para añadir.
                 </div>
 
-                <div v-for="(item, index) in metadata" :key="index" class="flex items-center gap-2 mb-2">
+                <div v-for="(item, index) in metadata" :key="index" class="flex items-center gap-2">
                     <input v-model="item.field" type="text" placeholder="Campo"
-                        class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
+                        class="mb-2 w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
                     <input v-model="item.value" type="text" placeholder="Valor"
-                        class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
-                    <button type="button" class="text-gray-400 hover:text-red-500 shrink-0"
-                        @click="removeMetadata(index)">
+                        class="mb-2 w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
+
+                    <UiIconButton title="Eliminar" variant="danger" @click="removeMetadata(index)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
+                            <path d="M10 11v6" />
+                            <path d="M14 11v6" />
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                            <path d="M3 6h18" />
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                         </svg>
-                    </button>
+                    </UiIconButton>
                 </div>
             </div>
 

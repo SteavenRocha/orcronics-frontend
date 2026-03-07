@@ -34,7 +34,7 @@ const sizes = {
                         <!-- HEADER -->
                         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                             <h2 class="text-xl font-semibold text-gray-900">{{ title }}</h2>
-                            <UiIconButton title="Editar" variant="default" @click="emit('close')">
+                            <UiIconButton title="Cerrar" variant="default" @click="emit('close')">
                                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
