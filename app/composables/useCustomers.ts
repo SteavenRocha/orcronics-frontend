@@ -13,11 +13,11 @@ export function useCustomers() {
     })
 
     /* Busca en la tabla de clientes, sin ncesidad de llamar a la API */
-    const filteredCustomers = computed(() =>
+    /* const filteredCustomers = computed(() =>
         customers.value.filter(c =>
             c.name.toLowerCase().includes(searchQuery.value.toLowerCase())
         )
-    )
+    ) */
 
     async function fetchCustomers(page = 1) {
         loading.value = true
@@ -92,7 +92,6 @@ export function useCustomers() {
 
     return {
         customers,
-        filteredCustomers,
         loading,
         searchQuery,
         meta,

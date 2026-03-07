@@ -9,7 +9,7 @@ useHead({ title: 'Sucursales | Orcronics' })
 const {
     customer,
     customerLoading,
-    filteredBranches,
+    branches,
     loading,
     searchQuery,
     meta,
@@ -103,11 +103,11 @@ onMounted(() => {
         </div>
 
         <!-- TABLA -->
-        <UiDataTable v-model:search="searchQuery" :loading="loading" :empty="filteredBranches.length === 0"
+        <UiDataTable v-model:search="searchQuery" :loading="loading" :empty="branches.length === 0"
             :columns="['Sucursal', 'Dirección', 'Contacto', 'Fecha de creación', 'Acciones']" :meta="meta"
             :current-page="currentPage" search-placeholder="Buscar sucursales..." @page-change="goToPage">
             <template #rows>
-                <tr v-for="branch in filteredBranches" :key="branch.id"
+                <tr v-for="branch in branches" :key="branch.id"
                     class="hover:bg-gray-50 transition-colors cursor-pointer"
                     @click="navigateTo(`/customers/${customerId}/branches/${branch.id}`)">
                     <td class="px-6 py-4">

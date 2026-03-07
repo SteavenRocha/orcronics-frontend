@@ -34,12 +34,6 @@ export function useBranches(customerId: string) {
         totalPages: 1, hasNextPage: false, hasPrevPage: false
     })
 
-    const filteredBranches = computed(() =>
-        branches.value.filter(b =>
-            b.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-        )
-    )
-
     async function fetchBranches(page = 1) {
         loading.value = true
         try {
@@ -99,7 +93,6 @@ export function useBranches(customerId: string) {
         customer,
         customerLoading,
         branches,
-        filteredBranches,
         loading,
         searchQuery,
         meta,

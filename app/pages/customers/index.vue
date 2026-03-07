@@ -2,7 +2,7 @@
 useHead({ title: 'Clientes | Orcronics' })
 
 const {
-    filteredCustomers,
+    customers,
     loading,
     searchQuery,
     meta,
@@ -89,12 +89,12 @@ onMounted(fetchCustomers)
         </div>
 
         <!-- TABLA -->
-        <UiDataTable v-model:search="searchQuery" :loading="loading" :empty="filteredCustomers.length === 0"
-            :meta="meta" :current-page="currentPage" search-placeholder="Buscar clientes..." @page-change="goToPage"
+        <UiDataTable v-model:search="searchQuery" :loading="loading" :empty="customers.length === 0" :meta="meta"
+            :current-page="currentPage" search-placeholder="Buscar clientes..." @page-change="goToPage"
             :columns="['Cliente', 'Estado', 'Fecha de creación', 'Acciones']">
 
             <template #rows>
-                <tr v-for="customer in filteredCustomers" :key="customer.id"
+                <tr v-for="customer in customers" :key="customer.id"
                     class="hover:bg-gray-50 transition-colors cursor-pointer"
                     @click="handleRowClick(customer.id, customer.is_active)">
                     <td class="px-6 py-4">

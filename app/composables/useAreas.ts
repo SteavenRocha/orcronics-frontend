@@ -34,12 +34,6 @@ export function useAreas(customerId: string, branchId: string) {
         totalPages: 1, hasNextPage: false, hasPrevPage: false
     })
 
-    const filteredAreas = computed(() =>
-        areas.value.filter(b =>
-            b.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-        )
-    )
-
     async function fetchAreas(page = 1) {
         loading.value = true
         try {
@@ -105,7 +99,6 @@ export function useAreas(customerId: string, branchId: string) {
         customer,
         customerLoading,
         areas,
-        filteredAreas,
         loading,
         searchQuery,
         meta,

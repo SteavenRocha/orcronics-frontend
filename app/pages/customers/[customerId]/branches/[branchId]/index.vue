@@ -10,7 +10,7 @@ useHead({ title: 'Areas | Orcronics' })
 const {
     customer,
     customerLoading,
-    filteredAreas,
+    areas,
     loading,
     searchQuery,
     meta,
@@ -100,12 +100,11 @@ onMounted(() => {
         </div>
 
         <!-- TABLA -->
-        <UiDataTable v-model:search="searchQuery" :loading="loading" :empty="filteredAreas.length === 0"
+        <UiDataTable v-model:search="searchQuery" :loading="loading" :empty="areas.length === 0"
             :columns="['Area', 'Descripción', 'Dispositivos Asociados', 'Fecha de creación', 'Acciones']" :meta="meta"
             :current-page="currentPage" search-placeholder="Buscar areas..." @page-change="goToPage">
             <template #rows>
-                <tr v-for="area in filteredAreas" :key="area.id"
-                    class="hover:bg-gray-50 transition-colors cursor-pointer"
+                <tr v-for="area in areas" :key="area.id" class="hover:bg-gray-50 transition-colors cursor-pointer"
                     @click="navigateTo(`/customers/${customerId}/branches/${area.id}`)">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
