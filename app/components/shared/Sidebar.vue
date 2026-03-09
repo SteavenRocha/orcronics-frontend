@@ -9,7 +9,7 @@
         <div class="h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default flex flex-col">
             <ul class="space-y-1.5 mt-18 font-medium flex-1">
                 <li>
-                    <UiSideBarLink to="/" label="Dashboard" :exact="true">
+                    <UiSideBarLink to="/dashboard" label="Dashboard" :exact="true">
                         <template #icon>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -60,7 +60,7 @@
             </ul>
 
             <div class="pt-4 border-t border-default">
-                <UiSideBarLink to="/login" label="Cerrar sesión">
+                <UiSideBarLink to="/" label="Cerrar sesión">
                     <template #icon>
                         <svg class="shrink-0 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" fill="none" viewBox="0 0 24 24">

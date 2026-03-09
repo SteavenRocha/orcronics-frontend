@@ -11,7 +11,7 @@ export function useBreadcrumb(labels?: MaybeRef<{
     const items = computed(() => {
         const l = isRef(labels) ? labels.value : (labels ?? {})
         const crumbs: { label: string; to?: string; icon?: boolean }[] = [
-            { label: 'Inicio', to: '/', icon: true },
+            { label: 'Inicio', to: '/dashboard', icon: true },
             { label: 'Clientes', to: customerId ? '/customers' : undefined },
         ]
 
