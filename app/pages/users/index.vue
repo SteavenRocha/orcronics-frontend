@@ -15,7 +15,10 @@ const {
     toggleStatus,
 } = useUsers()
 
-const { items: breadcrumbs } = useBreadcrumb()
+const breadcrumbs = [
+    { label: 'Inicio', to: '/dashboard', icon: true },
+    { label: 'Usuarios' },
+]
 
 // --- MODAL CREAR ---
 const showCreateModal = ref(false)
