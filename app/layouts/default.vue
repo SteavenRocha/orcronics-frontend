@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import { initFlowbite } from 'flowbite';
+import { getInitials, getAvatarColor } from '~/utils/avatar'
+
+const { user, logout } = useAuth()
+
+const fullName = computed(() =>
+    user.value ? `${user.value.first_name} ${user.value.last_name}` : ''
+)
+
+const initials = computed(() => getInitials(fullName.value))
+const avatarColor = computed(() => getAvatarColor(fullName.value))
 
 onMounted(() => {
     useFlowbite(() => {
@@ -30,48 +40,66 @@ onMounted(() => {
                                 class="self-center text-lg font-semibold whitespace-nowrap dark:text-white">Orcronics</span>
                         </NuxtLink>
                     </div>
+
                     <div class="flex items-center">
                         <div class="flex items-center ms-3">
                             <div>
                                 <button type="button"
-                                    class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                                    aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                                    <span class="sr-only">Open user menu</span>
-                                    <img class="w-8 h-8 rounded-full"
-                                        src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                                        alt="user photo">
+                                    class="cursor-pointer flex items-center gap-2.5 rounded-md px-2 py-1.5 hover:bg-neutral-secondary-medium transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
+                                    aria-expanded="false" data-dropdown-toggle="dropdown-user"
+                                    data-dropdown-placement="bottom-end" data-dropdown-offset-skidding="5"
+                                    data-dropdown-offset-distance="20">
+                                    <!-- Avatar con iniciales -->
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+                                        :style="{ backgroundColor: avatarColor }">
+                                        {{ initials }}
+                                    </div>
+                                    <!-- Nombre y rol -->
+                                    <div class="hidden md:flex flex-col items-start">
+                                        <span class="text-sm font-medium text-heading leading-tight">{{ fullName
+                                        }}</span>
+                                        <span class="text-xs text-body capitalize leading-tight">
+                                            {{ user?.role?.replace(/_/g, ' ') }}
+                                        </span>
+                                    </div>
+                                    <!-- Chevron -->
+                                    <svg class="w-3.5 h-3.5 text-body hidden md:block" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
                                 </button>
                             </div>
-                            <div class="z-50 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44"
+
+                            <!-- Dropdown -->
+                            <div class="z-50 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-52"
                                 id="dropdown-user">
-                                <div class="px-4 py-3 border-b border-default-medium" role="none">
-                                    <p class="text-sm font-medium text-heading" role="none">
-                                        Neil Sims
-                                    </p>
-                                    <p class="text-sm text-body truncate" role="none">
-                                        neil.sims@flowbite.com
-                                    </p>
+                                <!-- Info usuario -->
+                                <div class="px-4 py-3 border-b border-default-medium">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-semibold"
+                                            :style="{ backgroundColor: avatarColor }">
+                                            {{ initials }}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-heading truncate">{{ fullName }}</p>
+                                            <p class="text-xs text-body capitalize truncate">{{
+                                                user?.role?.replace(/_/g, ' ') }}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <ul class="p-2 text-sm text-body font-medium" role="none">
+                                <!-- Opciones -->
+                                <ul class="p-2 text-sm font-medium" role="none">
                                     <li>
-                                        <a href="#"
-                                            class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                                            role="menuitem">Dashboard</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                                            role="menuitem">Settings</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                                            role="menuitem">Earnings</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                                            role="menuitem">Sign out</a>
+                                        <button
+                                            class="cursor-pointer inline-flex items-center gap-2 w-full p-2 text-body hover:bg-neutral-tertiary-medium hover:text-heading rounded transition-colors"
+                                            role="menuitem" @click="logout">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2" />
+                                            </svg>
+                                            Cerrar sesión
+                                        </button>
                                     </li>
                                 </ul>
                             </div>

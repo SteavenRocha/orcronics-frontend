@@ -1,10 +1,13 @@
-import { branchesService } from '~/services/branches.service'
-import { customersService } from '~/services/customers.service'
+import { useBranchesService } from '~/services/branches.service'
+import { useCustomersService } from '~/services/customers.service'
 import type { Branch } from '~/types/branch'
 import type { Customer } from '~/types/customer'
 import type { Meta } from '~/types/pagination'
 
 export function useBranches(customerId: string) {
+    const branchesService = useBranchesService()
+    const customersService = useCustomersService()
+
     // --- CLIENTE ---
     const customer = ref<Customer | null>(null)
     const customerLoading = ref(false)

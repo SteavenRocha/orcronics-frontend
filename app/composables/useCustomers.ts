@@ -1,8 +1,9 @@
 import type { Customer } from '~/types/customer'
 import type { Meta } from '~/types/pagination'
-import { customersService } from '~/services/customers.service'
+import { useCustomersService } from '~/services/customers.service'
 
 export function useCustomers() {
+    const customersService = useCustomersService()
     const customers = ref<Customer[]>([])
     const loading = ref(false)
     const searchQuery = ref('')

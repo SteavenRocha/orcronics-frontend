@@ -1,25 +1,41 @@
 import type { QueryResponse } from '~/types/pagination'
 import type { Customer } from '~/types/customer'
 
-export const customersService = {
-    getAll: (page = 1, limit = 10, search = '') =>
-        $fetch<QueryResponse<Customer>>(`${useApi()}/customers?page=${page}&limit=${limit}&search=${search}`),
+export function useCustomersService() {
+    const { $api } = useNuxtApp()
 
-    getOne: (id: string) =>
-        $fetch<Customer>(`${useApi()}/customers/${id}`),
+    return {
+        getAll: (page = 1, limit = 10, search = '') =>
+            $api<QueryResponse<Customer>>(`/customers?page=${page}&limit=${limit}&search=${search}`),
 
-    create: (body: object) =>
-        $fetch<Customer>(`${useApi()}/customers`, { method: 'POST', body }),
+        getOne: (id: string) =>
+            $api<Customer>(`/customers/${id}`),
 
-    update: (id: string, body: object) =>
-        $fetch<Customer>(`${useApi()}/customers/${id}`, { method: 'PATCH', body }),
+        create: (body: object) =>
+            $api<Customer>(`/customers`, {
+                method: 'POST',
+                body
+            }),
 
-    remove: (id: string) =>
-        $fetch(`${useApi()}/customers/${id}`, { method: 'DELETE' }),
+        update: (id: string, body: object) =>
+            $api<Customer>(`/customers/${id}`, {
+                method: 'PATCH',
+                body
+            }),
 
-    activate: (id: string) =>
-        $fetch<Customer>(`${useApi()}/customers/activate/${id}`, { method: 'PATCH' }),
+        remove: (id: string) =>
+            $api(`/customers/${id}`, {
+                method: 'DELETE'
+            }),
 
-    deactivate: (id: string) =>
-        $fetch<Customer>(`${useApi()}/customers/deactivate/${id}`, { method: 'PATCH' }),
+        activate: (id: string) =>
+            $api<Customer>(`/customers/activate/${id}`, {
+                method: 'PATCH'
+            }),
+
+        deactivate: (id: string) =>
+            $api<Customer>(`/customers/deactivate/${id}`, {
+                method: 'PATCH'
+            }),
+    }
 }

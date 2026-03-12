@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
     <aside id="top-bar-sidebar"
         class="fixed top-0 left-0 z-40 w-64 h-full transition-transform -translate-x-full sm:translate-x-0"
@@ -58,18 +54,6 @@
                     </UiSideBarLink>
                 </li>
             </ul>
-
-            <div class="pt-4 border-t border-default">
-                <UiSideBarLink to="/" label="Cerrar sesión">
-                    <template #icon>
-                        <svg class="shrink-0 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2" />
-                        </svg>
-                    </template>
-                </UiSideBarLink>
-            </div>
         </div>
     </aside>
 </template>

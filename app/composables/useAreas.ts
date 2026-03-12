@@ -1,12 +1,16 @@
-import { areasService } from '~/services/areas.service'
-import { branchesService } from '~/services/branches.service'
-import { customersService } from '~/services/customers.service'
+import { useAreasService } from '~/services/areas.service'
+import { useBranchesService } from '~/services/branches.service'
+import { useCustomersService } from '~/services/customers.service'
 import type { Area } from '~/types/area'
 import type { Branch } from '~/types/branch'
 import type { Customer } from '~/types/customer'
 import type { Meta } from '~/types/pagination'
 
 export function useAreas(customerId: string, branchId: string) {
+    const areasService = useAreasService()
+    const branchesService = useBranchesService()
+    const customersService = useCustomersService()
+
     // --- CLIENTE ---
     const customer = ref<Customer | null>(null)
     const customerLoading = ref(false)

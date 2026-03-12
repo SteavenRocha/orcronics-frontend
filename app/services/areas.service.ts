@@ -1,19 +1,31 @@
 import type { Area } from '~/types/area'
 import type { QueryResponse } from '~/types/pagination'
 
-export const areasService = {
-    getAllByBranch: (branchId: string, page = 1, limit = 10, search = '') =>
-        $fetch<QueryResponse<Area>>(`${useApi()}/areas/branch/${branchId}?page=${page}&limit=${limit}&search=${search}`),
+export function useAreasService() {
+    const { $api } = useNuxtApp()
 
-    getOne: (id: string) =>
-        $fetch<Area>(`${useApi()}/areas/${id}`),
+    return {
+        getAllByBranch: (branchId: string, page = 1, limit = 10, search = '') =>
+            $api<QueryResponse<Area>>(`/areas/branch/${branchId}?page=${page}&limit=${limit}&search=${search}`),
 
-    create: (body: object) =>
-        $fetch<Area>(`${useApi()}/areas`, { method: 'POST', body }),
+        getOne: (id: string) =>
+            $api<Area>(`/areas/${id}`),
 
-    update: (id: string, body: object) =>
-        $fetch<Area>(`${useApi()}/areas/${id}`, { method: 'PATCH', body }),
+        create: (body: object) =>
+            $api<Area>(`/areas`, {
+                method: 'POST',
+                body
+            }),
 
-    remove: (id: string) =>
-        $fetch(`${useApi()}/areas/${id}`, { method: 'DELETE' }),
+        update: (id: string, body: object) =>
+            $api<Area>(`/areas/${id}`, {
+                method: 'PATCH',
+                body
+            }),
+
+        remove: (id: string) =>
+            $api(`/areas/${id}`, {
+                method: 'DELETE'
+            }),
+    }
 }  

@@ -1,14 +1,19 @@
-import { devicesService } from '~/services/devices.service'
-import { customersService } from '~/services/customers.service'
+import { useDevicesService } from '~/services/devices.service'
+import { useCustomersService } from '~/services/customers.service'
+import { useBranchesService } from '~/services/branches.service'
+import { useAreasService } from '~/services/areas.service'
 import type { Device } from '~/types/device'
 import type { Customer } from '~/types/customer'
 import type { Meta } from '~/types/pagination'
 import type { Branch } from '~/types/branch'
 import type { Area } from '~/types/area'
-import { branchesService } from '~/services/branches.service'
-import { areasService } from '~/services/areas.service'
 
 export function useDevices(customerId: string, branchId: string, areaId: string) {
+    const areasService = useAreasService()
+    const branchesService = useBranchesService()
+    const customersService = useCustomersService()
+    const devicesService = useDevicesService()
+
     // --- CLIENTE ---
     const customer = ref<Customer | null>(null)
     const customerLoading = ref(false)

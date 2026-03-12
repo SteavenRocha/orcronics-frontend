@@ -1,16 +1,28 @@
 import type { Device } from '~/types/device'
 import type { QueryResponse } from '~/types/pagination'
 
-export const devicesService = {
-    getAllByArea: (areaId: string, page = 1, limit = 10, search = '') =>
-        $fetch<QueryResponse<Device>>(`${useApi()}/devices/area/${areaId}?page=${page}&limit=${limit}&search=${search}`),
+export function useDevicesService() {
+    const { $api } = useNuxtApp()
 
-    create: (body: object) =>
-        $fetch<Device>(`${useApi()}/devices`, { method: 'POST', body }),
+    return {
+        getAllByArea: (areaId: string, page = 1, limit = 10, search = '') =>
+            $api<QueryResponse<Device>>(`/devices/area/${areaId}?page=${page}&limit=${limit}&search=${search}`),
 
-    update: (id: string, body: object) =>
-        $fetch<Device>(`${useApi()}/devices/${id}`, { method: 'PATCH', body }),
+        create: (body: object) =>
+            $api<Device>(`/devices`, {
+                method: 'POST',
+                body
+            }),
 
-    remove: (id: string) =>
-        $fetch(`${useApi()}/devices/${id}`, { method: 'DELETE' }),
+        update: (id: string, body: object) =>
+            $api<Device>(`/devices/${id}`, {
+                method: 'PATCH',
+                body
+            }),
+
+        remove: (id: string) =>
+            $api(`/devices/${id}`, {
+                method: 'DELETE'
+            }),
+    }
 }
