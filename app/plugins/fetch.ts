@@ -4,7 +4,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     onRequest({ options }) {
       const token = import.meta.client
-        ? localStorage.getItem('access_token')
+        ? localStorage.getItem('accessToken')
         : null
 
       if (token) {
@@ -15,30 +15,30 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     async onResponseError({ response }) {
       if (response.status === 401) {
-        const refresh_token = import.meta.client
-          ? localStorage.getItem('refresh_token')
+        const refreshToken = import.meta.client
+          ? localStorage.getItem('refreshToken')
           : null
 
-        if (!refresh_token) {
-          localStorage.removeItem('access_token')
-          localStorage.removeItem('refresh_token')
+        if (!refreshToken) {
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
           await navigateTo('/login')
           return
         }
 
         try {
-          const tokens = await $fetch<{ access_token: string; refresh_token: string }>(
+          const tokens = await $fetch<{ accessToken: string; refreshToken: string }>(
             `${useRuntimeConfig().public.apiBaseUrl}/auth/refresh`,
             {
               method: 'POST',
-              headers: { Authorization: `Bearer ${refresh_token}` },
+              headers: { Authorization: `Bearer ${refreshToken}` },
             }
           )
-          localStorage.setItem('access_token', tokens.access_token)
-          localStorage.setItem('refresh_token', tokens.refresh_token)
+          localStorage.setItem('accessToken', tokens.accessToken)
+          localStorage.setItem('refreshToken', tokens.refreshToken)
         } catch {
-          localStorage.removeItem('access_token')
-          localStorage.removeItem('refresh_token')
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
           await navigateTo('/login')
         }
       }

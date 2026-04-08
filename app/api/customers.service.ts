@@ -28,14 +28,10 @@ export function useCustomersService() {
                 method: 'DELETE'
             }),
 
-        activate: (id: string) =>
-            $api<Customer>(`/customers/activate/${id}`, {
-                method: 'PATCH'
-            }),
-
-        deactivate: (id: string) =>
-            $api<Customer>(`/customers/deactivate/${id}`, {
-                method: 'PATCH'
+        updateStatus: (id: string, isActive: boolean) =>
+            $api(`/customers/${id}/status`, {
+                method: 'PATCH',
+                body: { isActive }
             }),
     }
 }

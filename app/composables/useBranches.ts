@@ -1,5 +1,5 @@
-import { useBranchesService } from '~/services/branches.service'
-import { useCustomersService } from '~/services/customers.service'
+import { useBranchesService } from '~/api/branches.service'
+import { useCustomersService } from '~/api/customers.service'
 import type { Branch } from '~/types/branch'
 import type { Customer } from '~/types/customer'
 import type { Meta } from '~/types/pagination'

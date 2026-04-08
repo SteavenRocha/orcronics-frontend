@@ -5,7 +5,7 @@ import { getInitials, getAvatarColor } from '~/utils/avatar'
 const { user, logout } = useAuth()
 
 const fullName = computed(() =>
-    user.value ? `${user.value.first_name} ${user.value.last_name}` : ''
+    user.value ? `${user.value.firstName} ${user.value.lastName}` : ''
 )
 
 const initials = computed(() => getInitials(fullName.value))
@@ -57,7 +57,7 @@ onMounted(() => {
                                     <!-- Nombre y rol -->
                                     <div class="hidden md:flex flex-col items-start">
                                         <span class="text-sm font-medium text-heading leading-tight">{{ fullName
-                                        }}</span>
+                                            }}</span>
                                         <span class="text-xs text-body capitalize leading-tight">
                                             {{ user?.role?.replace(/_/g, ' ') }}
                                         </span>

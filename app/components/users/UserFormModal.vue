@@ -3,8 +3,8 @@ const props = defineProps<{
     show: boolean
     mode?: 'create' | 'edit'
     initialData?: {
-        first_name: string;
-        last_name: string;
+        firstName: string;
+        lastName: string;
         email: string;
         role: string
     }
@@ -23,8 +23,8 @@ const roles = [
 ]
 
 const form = ref({
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     role: 'viewer',
@@ -34,12 +34,12 @@ const title = computed(() => props.mode === 'edit' ? 'Editar Usuario' : 'Agregar
 const submitLabel = computed(() => props.mode === 'edit' ? 'Guardar cambios' : 'Agregar')
 
 function handleSubmit() {
-    if (!form.value.first_name.trim() || !form.value.last_name.trim() || !form.value.email.trim()) return
+    if (!form.value.firstName.trim() || !form.value.lastName.trim() || !form.value.email.trim()) return
     if (props.mode === 'create' && !form.value.password.trim()) return
 
     const body: Record<string, string> = {
-        first_name: form.value.first_name,
-        last_name: form.value.last_name,
+        firstName: form.value.firstName,
+        lastName: form.value.lastName,
         email: form.value.email,
         role: form.value.role,
     }
@@ -55,8 +55,8 @@ function handleSubmit() {
 watch(() => props.show, (val) => {
     if (val) {
         form.value = {
-            first_name: props.initialData?.first_name ?? '',
-            last_name: props.initialData?.last_name ?? '',
+            firstName: props.initialData?.firstName ?? '',
+            lastName: props.initialData?.lastName ?? '',
             email: props.initialData?.email ?? '',
             password: '',
             role: props.initialData?.role ?? 'viewer',
@@ -71,12 +71,12 @@ watch(() => props.show, (val) => {
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Nombre</label>
-                    <input v-model="form.first_name" type="text" placeholder="Nombre"
+                    <input v-model="form.firstName" type="text" placeholder="Nombre"
                         class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Apellido</label>
-                    <input v-model="form.last_name" type="text" placeholder="Apellido"
+                    <input v-model="form.lastName" type="text" placeholder="Apellido"
                         class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
                 </div>
             </div>

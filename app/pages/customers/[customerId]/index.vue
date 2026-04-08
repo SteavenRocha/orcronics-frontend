@@ -30,13 +30,13 @@ const { items: breadcrumbs } = useBreadcrumb(
 // --- MODAL CREAR ---
 const showCreateModal = ref(false)
 
-async function handleCreate(data: { name: string; address: string; contact_name: string; contact_phone: string }) {
+async function handleCreate(data: { name: string; address: string; contactName: string; contactPhone: string }) {
     await createBranch({
         name: data.name,
         address: data.address || null,
-        contact_name: data.contact_name || null,
-        contact_phone: data.contact_phone || null,
-        customer_id: customerId
+        contactName: data.contactName || null,
+        contactPhone: data.contactPhone || null,
+        customerId: customerId
     })
     showCreateModal.value = false
 }
@@ -50,13 +50,13 @@ function openEdit(branch: Branch) {
     showEditModal.value = true
 }
 
-async function handleEdit(data: { name: string; address: string; contact_name: string; contact_phone: string }) {
+async function handleEdit(data: { name: string; address: string; contactName: string; contactPhone: string }) {
     if (!editingBranch.value) return
     await updateBranch(editingBranch.value.id, {
         name: data.name,
         address: data.address || null,
-        contact_name: data.contact_name || null,
-        contact_phone: data.contact_phone || null,
+        contactName: data.contactName || null,
+        contactPhone: data.contactPhone || null,
     })
     showEditModal.value = false
     editingBranch.value = null
@@ -151,8 +151,8 @@ onMounted(() => {
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <template v-if="branch.contact_name || branch.contact_phone">
-                            <p class="text-gray-900">{{ branch.contact_name ?? '—' }}</p>
+                        <template v-if="branch.contactName || branch.contactPhone">
+                            <p class="text-gray-900">{{ branch.contactName ?? '—' }}</p>
                             <div class="flex items-center gap-2 text-gray-400 mt-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -161,12 +161,12 @@ onMounted(() => {
                                         d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
                                     </path>
                                 </svg>
-                                <p>{{ branch.contact_phone ?? '—' }}</p>
+                                <p>{{ branch.contactPhone ?? '—' }}</p>
                             </div>
                         </template>
                         <span v-else class="text-gray-400">—</span>
                     </td>
-                    <td class="px-6 py-4 text-gray-500">{{ formatDate(branch.created_at) }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ formatDate(branch.createdAt) }}</td>
                     <td class="px-6 py-4" @click.stop>
                         <div class="flex items-center justify-start gap-2">
                             <UiIconButton title="Editar" variant="primary" @click="openEdit(branch)">

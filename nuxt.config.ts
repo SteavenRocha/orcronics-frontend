@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   ssr: false, // desactivar renderizado del lado del servidor -> SPA activado
 
   devServer: {
-    port: 3001
+    port: 4201
   },
 
   /* Tailwind CSS */

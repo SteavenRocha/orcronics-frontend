@@ -1,6 +1,6 @@
-import { useAreasService } from '~/services/areas.service'
-import { useBranchesService } from '~/services/branches.service'
-import { useCustomersService } from '~/services/customers.service'
+import { useAreasService } from '~/api/areas.service'
+import { useBranchesService } from '~/api/branches.service'
+import { useCustomersService } from '~/api/customers.service'
 import type { Area } from '~/types/area'
 import type { Branch } from '~/types/branch'
 import type { Customer } from '~/types/customer'
@@ -83,7 +83,7 @@ export function useAreas(customerId: string, branchId: string) {
                 const current = areas.value[index]
                 areas.value[index] = {
                     ...updated,
-                    device_count: current?.device_count ?? 0
+                    _count: { devices: current?._count?.devices ?? 0 }
                 }
             }
         } catch (e) {

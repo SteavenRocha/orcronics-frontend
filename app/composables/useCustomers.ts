@@ -1,6 +1,6 @@
 import type { Customer } from '~/types/customer'
 import type { Meta } from '~/types/pagination'
-import { useCustomersService } from '~/services/customers.service'
+import { useCustomersService } from '~/api/customers.service'
 
 export function useCustomers() {
     const customersService = useCustomersService()
@@ -49,15 +49,11 @@ export function useCustomers() {
         }
     }
 
-    async function toggleStatus(id: string, is_active: boolean) {
+    async function updateStatus(id: string, isActive: boolean) {
         try {
-            const updated = await (is_active
-                ? customersService.deactivate(id)
-                : customersService.activate(id)
-            )
-
-            const index = customers.value.findIndex(c => c.id === id)
-            if (index !== -1) customers.value[index] = updated
+            await customersService.updateStatus(id, isActive)
+            const customer = customers.value.find(c => c.id === id)
+            if (customer) customer.isActive = isActive
 
         } catch (e) {
             console.error('Error toggling status:', e)
@@ -102,6 +98,6 @@ export function useCustomers() {
         createCustomer,
         updateCustomer,
         removeCustomer,
-        toggleStatus,
+        updateStatus,
     }
 }

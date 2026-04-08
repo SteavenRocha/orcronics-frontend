@@ -12,7 +12,7 @@ const {
     createCustomer,
     updateCustomer,
     removeCustomer,
-    toggleStatus,
+    updateStatus,
 } = useCustomers()
 
 // --- BREADCRUMBS ---
@@ -102,7 +102,7 @@ onMounted(fetchCustomers)
             <template #rows>
                 <tr v-for="customer in customers" :key="customer.id"
                     class="hover:bg-gray-50 transition-colors cursor-pointer"
-                    @click="handleRowClick(customer.id, customer.is_active)">
+                    @click="handleRowClick(customer.id, customer.isActive)">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <div :style="{ backgroundColor: getAvatarColor(customer.name) }"
@@ -117,15 +117,15 @@ onMounted(fetchCustomers)
                     </td>
                     <td class="px-6 py-4">
                         <span
-                            :class="['px-2.5 py-1 rounded-full text-xs font-medium', customer.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
-                            {{ customer.is_active ? 'Activo' : 'Inactivo' }}
+                            :class="['px-2.5 py-1 rounded-full text-xs font-medium', customer.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
+                            {{ customer.isActive ? 'Activo' : 'Inactivo' }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-gray-500">{{ formatDate(customer.created_at) }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ formatDate(customer.createdAt) }}</td>
                     <td class="px-6 py-4" @click.stop>
                         <div class="flex items-center gap-2">
-                            <UiIconButton :title="customer.is_active ? 'Desactivar' : 'Activar'" variant="warning"
-                                @click="toggleStatus(customer.id, customer.is_active)">
+                            <UiIconButton :title="customer.isActive ? 'Desactivar' : 'Activar'" variant="warning"
+                                @click="updateStatus(customer.id, !customer.isActive)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">

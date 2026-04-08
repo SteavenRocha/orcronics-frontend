@@ -51,7 +51,7 @@ async function handleCreate(data: {
 }) {
     await createDevice({
         ...data,
-        area_id: areaId,
+        areaId: areaId,
     })
     showCreateModal.value = false
 }
@@ -166,7 +166,7 @@ onMounted(() => {
                             {{ (device.username && device.password) ? 'Sí' : 'No' }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-gray-500">{{ formatDate(device.created_at) }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ formatDate(device.createdAt) }}</td>
                     <td class="px-6 py-4" @click.stop>
                         <div class="flex items-center justify-start gap-2">
                             <UiIconButton title="Editar" variant="primary" @click="openEdit(device)">

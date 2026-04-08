@@ -2,6 +2,6 @@ export interface Area {
     id: string
     name: string
     description: string | null
-    created_at: string
-    device_count: Number
+    createdAt: string
+    _count?: { devices: number }
 }

@@ -9,14 +9,14 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: []
-    submit: [data: { name: string; address: string; contact_name: string; contact_phone: string }]
+    submit: [data: { name: string; address: string; contactName: string; contactPhone: string }]
 }>()
 
 const form = ref({
     name: '',
     address: '',
-    contact_name: '',
-    contact_phone: '',
+    contactName: '',
+    contactPhone: '',
 })
 
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -34,12 +34,12 @@ watch(() => props.show, (val) => {
         form.value = {
             name: props.initialData?.name ?? '',
             address: props.initialData?.address ?? '',
-            contact_name: props.initialData?.contact_name ?? '',
-            contact_phone: props.initialData?.contact_phone ?? '',
+            contactName: props.initialData?.contactName ?? '',
+            contactPhone: props.initialData?.contactPhone ?? '',
         }
         nextTick(() => inputRef.value?.focus())
     } else {
-        form.value = { name: '', address: '', contact_name: '', contact_phone: '' }
+        form.value = { name: '', address: '', contactName: '', contactPhone: '' }
     }
 })
 </script>
@@ -66,12 +66,12 @@ watch(() => props.show, (val) => {
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Nombre de contacto</label>
-                    <input v-model="form.contact_name" type="text" placeholder="Nombre"
+                    <input v-model="form.contactName" type="text" placeholder="Nombre"
                         class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Teléfono de contacto</label>
-                    <input v-model="form.contact_phone" type="text" placeholder="Teléfono"
+                    <input v-model="form.contactPhone" type="text" placeholder="Teléfono"
                         class="w-full px-3 py-2 border border-gray-200 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
                 </div>
             </div>

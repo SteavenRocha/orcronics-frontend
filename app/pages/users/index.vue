@@ -12,7 +12,7 @@ const {
     createUser,
     updateUser,
     removeUser,
-    toggleStatus,
+    updateStatus,
 } = useUsers()
 
 const breadcrumbs = [
@@ -30,7 +30,13 @@ async function handleCreate(data: object) {
 
 // --- MODAL EDITAR ---
 const showEditModal = ref(false)
-const editingUser = ref<{ id: string; first_name: string; last_name: string; email: string; role: string } | null>(null)
+const editingUser = ref<{
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: string
+} | null>(null)
 
 function openEdit(user: typeof editingUser.value) {
     editingUser.value = user
@@ -46,7 +52,11 @@ async function handleEdit(data: object) {
 
 // --- MODAL ELIMINAR ---
 const showDeleteModal = ref(false)
-const deletingUser = ref<{ id: string; first_name: string; last_name: string } | null>(null)
+const deletingUser = ref<{
+    id: string;
+    firstName: string;
+    lastName: string
+} | null>(null)
 
 function openDelete(user: typeof deletingUser.value) {
     deletingUser.value = user
@@ -90,12 +100,12 @@ onMounted(fetchUsers)
                 <tr v-for="user in users" :key="user.id" class="hover:bg-gray-50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div :style="{ backgroundColor: getAvatarColor(`${user.first_name} ${user.last_name}`) }"
+                            <div :style="{ backgroundColor: getAvatarColor(`${user.firstName} ${user.lastName}`) }"
                                 class="w-9 h-9 rounded-md flex items-center justify-center text-white text-xs font-bold shrink-0">
-                                {{ getInitials(`${user.first_name} ${user.last_name}`) }}
+                                {{ getInitials(`${user.firstName} ${user.lastName}`) }}
                             </div>
                             <div>
-                                <p class="font-medium text-gray-900">{{ user.first_name }} {{ user.last_name }}</p>
+                                <p class="font-medium text-gray-900">{{ user.firstName }} {{ user.lastName }}</p>
                                 <p class="text-xs text-gray-400">ID: {{ user.id }}</p>
                             </div>
                         </div>
@@ -108,15 +118,15 @@ onMounted(fetchUsers)
                     </td>
                     <td class="px-6 py-4">
                         <span :class="['px-2.5 py-1 rounded-full text-xs font-medium',
-                            user.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
-                            {{ user.is_active ? 'Activo' : 'Inactivo' }}
+                            user.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
+                            {{ user.isActive ? 'Activo' : 'Inactivo' }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-gray-500">{{ formatDate(user.created_at) }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ formatDate(user.createdAt) }}</td>
                     <td class="px-6 py-4" @click.stop>
                         <div class="flex items-center gap-2">
-                            <UiIconButton :title="user.is_active ? 'Desactivar' : 'Activar'" variant="warning"
-                                @click="toggleStatus(user.id, user.is_active)">
+                            <UiIconButton :title="user.isActive ? 'Desactivar' : 'Activar'" variant="warning"
+                                @click="updateStatus(user.id, !user.isActive)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -125,7 +135,8 @@ onMounted(fetchUsers)
                                     <path d="M10 12h4" />
                                 </svg>
                             </UiIconButton>
-                            <UiIconButton title="Editar" variant="primary" @click="openEdit(user)">
+                            <UiIconButton title="Editar" variant="primary" :disabled="!user.isActive"
+                                @click="openEdit(user)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -159,7 +170,7 @@ onMounted(fetchUsers)
     <UiConfirmModal :show="showDeleteModal" title="Eliminar Usuario" @close="showDeleteModal = false"
         @confirm="handleDelete">
         <template #message>
-            <p>¿Estás seguro de eliminar al usuario: <strong>{{ deletingUser?.first_name }} {{ deletingUser?.last_name
+            <p>¿Estás seguro de eliminar al usuario: <strong>{{ deletingUser?.firstName }} {{ deletingUser?.lastName
                     }}</strong>?</p>
             <p class="mt-2 text-gray-500">Esta acción es irreversible.</p>
         </template>

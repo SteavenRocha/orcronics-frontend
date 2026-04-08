@@ -40,7 +40,7 @@ async function handleCreate(data: { name: string; description: string }) {
     await createArea({
         name: data.name,
         description: data.description || null,
-        branch_id: branchId
+        branchId: branchId
     })
     showCreateModal.value = false
 }
@@ -147,10 +147,10 @@ onMounted(() => {
                     </td>
                     <td class="px-6 py-4 text-xs font-medium text-gray-900">
                         <p class="rounded-base bg-gray-100 py-0.5 px-2 w-fit">
-                            {{ area.device_count ?? 0 }} Dispositivos
+                            {{ area._count?.devices ?? 0 }} Dispositivos
                         </p>
                     </td>
-                    <td class="px-6 py-4 text-gray-500">{{ formatDate(area.created_at) }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ formatDate(area.createdAt) }}</td>
                     <td class="px-6 py-4" @click.stop>
                         <div class="flex items-center justify-start gap-2">
                             <UiIconButton title="Editar" variant="primary" @click="openEdit(area)">

@@ -6,7 +6,7 @@ export interface Device {
     username: string | null
     password: string | null
     notes: string | null
-    created_at: string
+    createdAt: string
     metadata: DeviceMetadata[] | null
 }
 

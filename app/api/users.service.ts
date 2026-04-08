@@ -23,19 +23,15 @@ export function useUsersService() {
                 body
             }),
 
+        updateStatus: (id: string, isActive: boolean) =>
+            $api(`/users/${id}/status`, {
+                method: 'PATCH',
+                body: { isActive }
+            }),
+
         remove: (id: string) =>
             $api(`/users/${id}`, {
                 method: 'DELETE'
-            }),
-
-        activate: (id: string) =>
-            $api<User>(`/users/activate/${id}`, {
-                method: 'PATCH'
-            }),
-
-        deactivate: (id: string) =>
-            $api<User>(`/users/deactivate/${id}`, {
-                method: 'PATCH'
             }),
     }
 }

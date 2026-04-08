@@ -1,5 +1,5 @@
 
-import { useUsersService } from '~/services/users.service'
+import { useUsersService } from '~/api/users.service'
 import type { User } from '~/types/user'
 import type { Meta } from '~/types/pagination'
 
@@ -40,6 +40,12 @@ export function useUsers() {
         if (index !== -1) users.value[index] = updated
     }
 
+    async function updateStatus(id: string, isActive: boolean) {
+        await usersService.updateStatus(id, isActive)
+        const user = users.value.find(u => u.id === id)
+        if (user) user.isActive = isActive
+    }
+
     async function removeUser(id: string) {
         await usersService.remove(id)
         if (users.value.length === 1 && currentPage.value > 1) {
@@ -47,15 +53,6 @@ export function useUsers() {
         } else {
             await fetchUsers(currentPage.value)
         }
-    }
-
-    async function toggleStatus(id: string, is_active: boolean) {
-        const updated = await (is_active
-            ? usersService.deactivate(id)
-            : usersService.activate(id)
-        )
-        const index = users.value.findIndex(u => u.id === id)
-        if (index !== -1) users.value[index] = updated
     }
 
     async function goToPage(page: number) {
@@ -77,7 +74,7 @@ export function useUsers() {
         createUser,
         updateUser,
         removeUser,
-        toggleStatus,
+        updateStatus,
         goToPage,
     }
 }

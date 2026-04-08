@@ -1,9 +1,9 @@
-import { useAuthService } from '~/services/auth.service'
+import { useAuthService } from '~/api/auth.service'
 import type { Login } from '~/types/auth'
 import type { User } from '~/types/user'
 
-const ACCESS_TOKEN_KEY = 'access_token'
-const REFRESH_TOKEN_KEY = 'refresh_token'
+const ACCESS_TOKEN_KEY = 'accessToken'
+const REFRESH_TOKEN_KEY = 'refreshToken'
 
 export function useAuth() {
     const user = useState<User | null>('auth:user', () => null)
@@ -19,9 +19,9 @@ export function useAuth() {
         return localStorage.getItem(REFRESH_TOKEN_KEY)
     }
 
-    function setTokens(access_token: string, refresh_token: string): void {
-        localStorage.setItem(ACCESS_TOKEN_KEY, access_token)
-        localStorage.setItem(REFRESH_TOKEN_KEY, refresh_token)
+    function setTokens(accessToken: string, refreshToken: string): void {
+        localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
+        localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
     }
 
     function clearTokens(): void {
@@ -40,7 +40,7 @@ export function useAuth() {
     async function login(dto: Login): Promise<void> {
         const authService = useAuthService()
         const tokens = await authService.login(dto)
-        setTokens(tokens.access_token, tokens.refresh_token)
+        setTokens(tokens.accessToken, tokens.refreshToken)
         await fetchUser()
     }
 

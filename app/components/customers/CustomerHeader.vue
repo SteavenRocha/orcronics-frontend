@@ -25,14 +25,14 @@ defineProps<{
                     <div class="flex items-center gap-2">
                         <h1 class="text-2xl font-semibold text-gray-900">{{ customer?.name }}</h1>
                         <span
-                            :class="['px-2 py-0.5 rounded-full text-xs font-medium', customer?.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
-                            {{ customer?.is_active ? 'Activo' : 'Inactivo' }}
+                            :class="['px-2 py-0.5 rounded-full text-xs font-medium', customer?.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600']">
+                            {{ customer?.isActive ? 'Activo' : 'Inactivo' }}
                         </span>
                     </div>
                     <div class="flex items-center gap-2 mt-1">
                         <span class="text-xs text-gray-400">ID: {{ customer?.id }}</span>
                         <span class="text-xs text-gray-400">|</span>
-                        <span class="text-xs text-gray-400">Registrado el {{ customer ? formatDate(customer.created_at)
+                        <span class="text-xs text-gray-400">Registrado el {{ customer ? formatDate(customer.createdAt)
                             : '' }}</span>
                     </div>
                 </template>
