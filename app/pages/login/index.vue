@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Login } from '~/types/auth'
 
+useHead({ title: 'Login | Orcronics' })
+
 definePageMeta({
     layout: false,
 })
@@ -66,7 +68,7 @@ async function handleLogin() {
 </script>
 
 <template>
-    <div class="min-h-screen flex">
+    <div class="min-h-dvh flex">
 
         <!-- Panel izquierdo: branding con gradiente azul -->
         <div

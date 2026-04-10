@@ -54,7 +54,6 @@ export function useCustomers() {
             await customersService.updateStatus(id, isActive)
             const customer = customers.value.find(c => c.id === id)
             if (customer) customer.isActive = isActive
-
         } catch (e) {
             console.error('Error toggling status:', e)
         }
