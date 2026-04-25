@@ -98,7 +98,7 @@ async function handleLogin() {
 
             <!-- Footer -->
             <div class="absolute bottom-6 z-10">
-                <p class="text-white/60 text-xs">© 2026 Orcronics ERP v0.2.0</p>
+                <p class="text-white/60 text-xs">© 2026 Orcronics ERP v0.3.0</p>
             </div>
         </div>
 

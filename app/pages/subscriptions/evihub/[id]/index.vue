@@ -6,11 +6,14 @@ const subscriptionId = route.params.id as string
 
 const {
     subscription,
+    subscriptionLoading,
     fetchOne
 } = useSubscriptions()
 
 // --- BREADCRUMBS ---
-const { items: breadcrumbs } = useBreadcrumb()
+const { items: breadcrumbs } = useBreadcrumb(computed(() => ({
+    subscription: subscription.value?.customer?.name ?? null
+})))
 
 const {
     users,
@@ -45,7 +48,7 @@ onMounted(async () => {
         <UiBreadcrumb :items="breadcrumbs" />
 
         <!-- HEADER CLIENTE -->
-        <SubscriptionsSubscriptionHeader :subscription="subscription" :loading="loading" />
+        <SubscriptionsSubscriptionHeader :subscription="subscription" :loading="subscriptionLoading" />
 
         <div class="flex items-center justify-between">
             <div>

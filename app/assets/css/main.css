@@ -15,11 +15,6 @@
     --color-secondary: #1e293b;
 }
 
-@import "tailwindcss";
-@import "flowbite/src/themes/default";
-@plugin "flowbite/plugin";
-@source "../../../node_modules/flowbite";
-
 /* Firefox únicamente */
 @supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {
     .personalized-scroll {
